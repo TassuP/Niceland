@@ -1,6 +1,6 @@
 extends Node
 
-var invert_mouse = true
+var invert_mouse = false
 var paused = true
 var dev_mode = false
 var geometry_level = 0.5 # Range from 0.0 to 1.0
