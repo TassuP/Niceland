@@ -1,6 +1,6 @@
-# Niceland by Tapio Pyrhönen
+# Niceland
 
-First released at PROCJAM 2017.
+Download builds from: https://tassup.itch.io/niceland
 
 This is a procedural world generator that is ment to be used as a base for an open world game. Made with Godot 3.0 alpha 2.
 
@@ -11,5 +11,4 @@ They were made by Khalkeus.
 
 Terrain base image is composed from NASA's heightmap images of planet Earth. Niceland doesn't use this image as a normal heightmap, but instead mixes and juggles it around to create endless variations of mountains, lakes and stuff. Usually terrain systems use either a heightmap image, fractal or a noise algorithm to create the ground, but Niceland kinda blends all those things together.
 
-Grab the sources from and have a nice day!
-
+Grab the sources and have a nice day!
