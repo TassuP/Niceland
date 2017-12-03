@@ -1,7 +1,6 @@
 extends Node
 
 export(NodePath) var plr
-export(NodePath) var plr_ctrl
 export(NodePath) var env
 export(NodePath) var cam
 export(NodePath) var terrain
@@ -42,7 +41,6 @@ var sky_upd_interval = 60 # seconds
 
 func _ready():
 	plr = get_node(plr)
-	plr_ctrl = get_node(plr_ctrl)
 	env = get_node(env).get_environment()
 	cam = get_node(cam)
 	terrain = get_node(terrain)
@@ -242,8 +240,8 @@ func upd_fog():
 		env.set_fog_depth_curve(0.1)
 		fog_c = sky_c / 2.0
 	
-	var hfog_max = plr_pos.y - 30.0
-	var hfog_min = min(hfog_max - 400.0, Height_Main.water_level)
+	var hfog_min = plr_pos.y - 30.0
+	var hfog_max = min(hfog_min - 400.0, Height_Main.water_level)
 	env.set_fog_height_min(hfog_min)
 	env.set_fog_height_max(hfog_max)
 	

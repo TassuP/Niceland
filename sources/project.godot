@@ -33,9 +33,12 @@ scroll_down=[ Object(InputEventMouseButton,"resource_local_to_scene":false,"reso
 toggle_minimap=[ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":77,"unicode":0,"echo":false,"script":null)
  ]
 
+[logging]
+
+file_logging/enable_file_logging=true
+
 [rendering]
 
-threads/thread_model=2
 quality/reflections/high_quality_ggx=false
 quality/reflections/atlas_size=512
 quality/filters/msaa=1
