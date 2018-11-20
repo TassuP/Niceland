@@ -1,0 +1,1283 @@
+[gd_scene load_steps=65 format=2]
+
+[ext_resource path="res://default_env.tres" type="Environment" id=1]
+[ext_resource path="res://Scripts/World.gd" type="Script" id=2]
+[ext_resource path="res://Scripts/FlyCam.gd" type="Script" id=3]
+[ext_resource path="res://Materials/Clouds.material" type="Material" id=4]
+[ext_resource path="res://Scripts/Clouds.gd" type="Script" id=5]
+[ext_resource path="res://Materials/Ground.material" type="Material" id=6]
+[ext_resource path="res://Scripts/Ground.gd" type="Script" id=7]
+[ext_resource path="res://Shaders/Water.shader" type="Shader" id=8]
+[ext_resource path="res://Scripts/Water.gd" type="Script" id=9]
+[ext_resource path="res://Materials/Water_far.material" type="Material" id=10]
+[ext_resource path="res://Materials/Spruce.material" type="Material" id=11]
+[ext_resource path="res://Meshes/Spruce.obj" type="ArrayMesh" id=12]
+[ext_resource path="res://Scripts/GroundObjects.gd" type="Script" id=13]
+[ext_resource path="res://Meshes/Spruce lod.obj" type="ArrayMesh" id=14]
+[ext_resource path="res://Meshes/Grass.obj" type="ArrayMesh" id=15]
+[ext_resource path="res://Meshes/Rock.obj" type="ArrayMesh" id=16]
+[ext_resource path="res://Meshes/Rock lod.obj" type="ArrayMesh" id=17]
+[ext_resource path="res://Meshes/Plant 1.obj" type="ArrayMesh" id=18]
+[ext_resource path="res://Meshes/Plant 2.obj" type="ArrayMesh" id=19]
+[ext_resource path="res://Meshes/Plant 3.obj" type="ArrayMesh" id=20]
+[ext_resource path="res://Meshes/Shroom.obj" type="ArrayMesh" id=21]
+[ext_resource path="res://Meshes/Shroom lod.obj" type="ArrayMesh" id=22]
+[ext_resource path="res://Scripts/Music.gd" type="Script" id=23]
+[ext_resource path="res://Music/drums.ogg" type="AudioStream" id=24]
+[ext_resource path="res://Music/basso.ogg" type="AudioStream" id=25]
+[ext_resource path="res://Music/cheesepom.ogg" type="AudioStream" id=26]
+[ext_resource path="res://Music/pad.ogg" type="AudioStream" id=27]
+
+[sub_resource type="OpenSimplexNoise" id=1]
+
+seed = 3
+octaves = 2
+period = 128.0
+persistence = 0.257
+lacunarity = 2.0
+
+[sub_resource type="NoiseTexture" id=2]
+
+flags = 7
+width = 512
+height = 512
+seamless = true
+as_normalmap = false
+noise = SubResource( 1 )
+
+[sub_resource type="QuadMesh" id=3]
+
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+flip_faces = false
+size = Vector2( 1, 1 )
+
+[sub_resource type="PlaneMesh" id=4]
+
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+flip_faces = false
+size = Vector2( 2, 2 )
+subdivide_width = 0
+subdivide_depth = 0
+
+[sub_resource type="OpenSimplexNoise" id=5]
+
+seed = 0
+octaves = 1
+period = 16.0
+persistence = 0.5
+lacunarity = 3.0
+
+[sub_resource type="NoiseTexture" id=6]
+
+flags = 7
+width = 256
+height = 256
+seamless = true
+as_normalmap = false
+noise = SubResource( 5 )
+
+[sub_resource type="ShaderMaterial" id=7]
+
+render_priority = 0
+shader = ExtResource( 8 )
+shader_param/water_color = Color( 0.584314, 0.686275, 0.858824, 1 )
+shader_param/foam_color = Color( 0.815686, 0.890196, 0.968627, 1 )
+shader_param/wind_uv_offset = Vector2( 0, 0 )
+shader_param/wind_dir = Vector2( 1, 0 )
+shader_param/wind_speed = 0.1
+shader_param/texture_waves = SubResource( 6 )
+
+[sub_resource type="PlaneMesh" id=8]
+
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+flip_faces = false
+size = Vector2( 512, 512 )
+subdivide_width = 256
+subdivide_depth = 256
+
+[sub_resource type="PlaneMesh" id=9]
+
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+flip_faces = false
+size = Vector2( 1024, 1024 )
+subdivide_width = 256
+subdivide_depth = 256
+
+[sub_resource type="MultiMesh" id=10]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 1
+mesh = ExtResource( 12 )
+transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="SpatialMaterial" id=11]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = true
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+flags_do_not_receive_shadows = false
+flags_disable_ambient_light = false
+flags_ensure_correct_normals = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 1
+params_specular_mode = 4
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 1
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 2
+params_billboard_keep_scale = true
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 0.109804, 0.298039, 0.156863, 1 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 1.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_mode = 0
+
+[sub_resource type="MultiMesh" id=12]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 0
+mesh = ExtResource( 14 )
+transform_array = PoolVector3Array(  )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="Shader" id=13]
+
+code = "shader_type spatial;
+render_mode blend_mix,depth_draw_always,cull_disabled,diffuse_burley,specular_disabled,vertex_lighting;
+
+uniform sampler2D texture_wind;
+uniform vec2 wind_uv_offset = vec2(0.0, 0.0);
+uniform vec2 wind_dir = vec2(0.0, 0.0);
+uniform float wind_speed = 0.1;
+uniform float wind_bend = 2.0;
+uniform float wind_scale = 0.02;
+
+uniform vec4 albedo : hint_color;
+uniform vec4 ground_color : hint_color;
+
+varying vec4 col;
+
+void vertex() {
+	// Wind texture
+	vec4 wpos = WORLD_MATRIX * vec4(VERTEX, 1.0);
+	vec2 wind_uv = (wpos.xz * wind_scale) + wind_uv_offset;
+	float wind = texture(texture_wind, wind_uv).r - 0.4;
+	
+	// Apply wind
+	vec3 wind_offset = (inverse(WORLD_MATRIX) * vec4(wind_dir.x, 0.0, wind_dir.y, 0.0)).xyz;
+	VERTEX -= wind_offset * wind * (VERTEX.y*VERTEX.y) * wind_bend * wind_speed;
+	
+	col = mix(ground_color, albedo, smoothstep(0.0, 1.0, VERTEX.y / 2.0));
+}
+
+void fragment() {
+	ALBEDO = col.rgb;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=14]
+
+render_priority = 0
+shader = SubResource( 13 )
+shader_param/wind_uv_offset = Vector2( 0, 0 )
+shader_param/wind_dir = Vector2( 0, 0 )
+shader_param/wind_speed = 0.1
+shader_param/wind_bend = 2.0
+shader_param/wind_scale = 0.04
+shader_param/albedo = Color( 0.666667, 0.584314, 0.368627, 1 )
+shader_param/ground_color = Color( 0.6, 0.521569, 0.329412, 1 )
+
+[sub_resource type="MultiMesh" id=15]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 1
+mesh = ExtResource( 15 )
+transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="Shader" id=16]
+
+code = "shader_type spatial;
+render_mode blend_mix,depth_draw_always,cull_disabled,diffuse_burley,specular_disabled,vertex_lighting;
+
+uniform vec4 albedo : hint_color;
+uniform vec4 ground_color : hint_color;
+uniform float fade_start = 16.0;
+uniform float fade_end = 32.0;
+
+varying vec4 col;
+
+void vertex() {
+	col = mix(ground_color, albedo, smoothstep(0.0, 1.0, VERTEX.y / 2.0));
+}
+
+void fragment() {
+	ALBEDO = col.rgb;
+	ALPHA = 1.0 - smoothstep(fade_start, fade_end, -VERTEX.z);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=17]
+
+render_priority = 0
+shader = SubResource( 16 )
+shader_param/albedo = Color( 0.713726, 0.623529, 0.396078, 1 )
+shader_param/ground_color = Color( 0.6, 0.521569, 0.329412, 1 )
+shader_param/fade_start = 16.0
+shader_param/fade_end = 32.0
+
+[sub_resource type="MultiMesh" id=18]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 0
+mesh = ExtResource( 15 )
+transform_array = PoolVector3Array(  )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="SpatialMaterial" id=19]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+flags_do_not_receive_shadows = false
+flags_disable_ambient_light = false
+flags_ensure_correct_normals = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_billboard_keep_scale = false
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 0.545098, 0.537255, 0.603922, 1 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 1.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_mode = 0
+
+[sub_resource type="MultiMesh" id=20]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 1
+mesh = ExtResource( 16 )
+transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="MultiMesh" id=21]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 0
+mesh = ExtResource( 17 )
+transform_array = PoolVector3Array(  )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="MultiMesh" id=22]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 1
+mesh = ExtResource( 16 )
+transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="MultiMesh" id=23]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 0
+mesh = ExtResource( 17 )
+transform_array = PoolVector3Array(  )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="ShaderMaterial" id=24]
+
+render_priority = 0
+shader = SubResource( 13 )
+shader_param/wind_uv_offset = Vector2( 0, 0 )
+shader_param/wind_dir = Vector2( 0, 0 )
+shader_param/wind_speed = 0.1
+shader_param/wind_bend = 6.0
+shader_param/wind_scale = 0.07
+shader_param/albedo = Color( 0.419608, 0.733333, 0.415686, 1 )
+shader_param/ground_color = Color( 0.254902, 0.529412, 0.254902, 1 )
+
+[sub_resource type="MultiMesh" id=25]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 1
+mesh = ExtResource( 18 )
+transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="ShaderMaterial" id=26]
+
+render_priority = 0
+shader = SubResource( 13 )
+shader_param/wind_uv_offset = Vector2( 0, 0 )
+shader_param/wind_dir = Vector2( 0, 0 )
+shader_param/wind_speed = 0.1
+shader_param/wind_bend = 0.3
+shader_param/wind_scale = 0.02
+shader_param/albedo = Color( 0.490196, 0.262745, 0.184314, 1 )
+shader_param/ground_color = Color( 0.415686, 0.247059, 0.12549, 1 )
+
+[sub_resource type="MultiMesh" id=27]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 1
+mesh = ExtResource( 19 )
+transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="SpatialMaterial" id=28]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = true
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+flags_do_not_receive_shadows = false
+flags_disable_ambient_light = false
+flags_ensure_correct_normals = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 4
+params_blend_mode = 0
+params_cull_mode = 2
+params_depth_draw_mode = 1
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 2
+params_billboard_keep_scale = true
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 0.454902, 0.239216, 0.164706, 1 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 1.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_mode = 0
+
+[sub_resource type="MultiMesh" id=29]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 0
+mesh = ExtResource( 19 )
+transform_array = PoolVector3Array(  )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="ShaderMaterial" id=30]
+
+render_priority = 0
+shader = SubResource( 13 )
+shader_param/wind_uv_offset = Vector2( 0, 0 )
+shader_param/wind_dir = Vector2( 0, 0 )
+shader_param/wind_speed = 0.1
+shader_param/wind_bend = 0.3
+shader_param/wind_scale = 0.02
+shader_param/albedo = Color( 0.419608, 0.733333, 0.415686, 1 )
+shader_param/ground_color = Color( 0.254902, 0.529412, 0.254902, 1 )
+
+[sub_resource type="MultiMesh" id=31]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 1
+mesh = ExtResource( 20 )
+transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="SpatialMaterial" id=32]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+flags_do_not_receive_shadows = false
+flags_disable_ambient_light = false
+flags_ensure_correct_normals = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_billboard_keep_scale = false
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 0.560784, 0.388235, 0.223529, 1 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 1.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_mode = 0
+
+[sub_resource type="MultiMesh" id=33]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 1
+mesh = ExtResource( 21 )
+transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="SpatialMaterial" id=34]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = true
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+flags_do_not_receive_shadows = false
+flags_disable_ambient_light = false
+flags_ensure_correct_normals = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 4
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 1
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 2
+params_billboard_keep_scale = true
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 0.560784, 0.388235, 0.223529, 1 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 1.0
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = false
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_mode = 0
+
+[sub_resource type="MultiMesh" id=35]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 0
+mesh = ExtResource( 22 )
+transform_array = PoolVector3Array(  )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="Shader" id=36]
+
+code = "shader_type canvas_item;
+
+uniform float brightness = 1.0;
+uniform float contrast = 1.0;
+uniform float saturation = 1.0;
+
+vec3 rgb2hsv(vec3 c)
+{
+    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+
+    float d = q.x - min(q.w, q.y);
+    float e = 1.0e-10;
+    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
+
+vec3 hsv2rgb(vec3 c)
+{
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+void fragment() {
+	
+	vec3 c = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0).rgb;
+	float lum = (c.r * 0.2126) + (c.g * 0.7152) + (c.b * 0.0722);
+	
+//	vec3 blur = textureLod(SCREEN_TEXTURE, SCREEN_UV, 3.0).rgb;
+//	blur += textureLod(SCREEN_TEXTURE, SCREEN_UV, 2.0).rgb;
+//	blur /= 2.0;
+//	float blum = (blur.r * 0.2126) + (blur.g * 0.7152) + (blur.b * 0.0722);
+//	c = mix(c, blur, pow(1.0 - blum, 2.0));
+	
+	// Sharpen
+	vec3 e = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0).rgb - textureLod(SCREEN_TEXTURE, SCREEN_UV, 3.0).rgb;
+//	e.r = abs(e.r);
+//	e.g = abs(e.g);
+//	e.b = abs(e.b);
+	c.r = max(c.r, mix(c, c - e, 0.4).r);
+	c.g = max(c.g, mix(c, c - e, 0.4).g);
+	c.b = max(c.b, mix(c, c - e, 0.4).b);
+	
+	// Sepia hue
+	float fr = (c.r * 0.393) + (c.g * 0.769) + (c.b * 0.189);
+	float fg = (c.r * 0.349) + (c.g * 0.686) + (c.b * 0.168);
+	float fb = (c.r * 0.272) + (c.g * 0.534) + (c.b * 0.131);
+	c.rgb = mix(c.rgb, vec3(fr, fg, fb), 0.2);
+	
+	// Color tone
+//	float tone_lum = lum;
+//	float fr = (c.r * 0.393) + (c.g * 0.769) + (c.b * 0.189);
+//	float fg = (c.r * 0.349) + (c.g * 0.686) + (c.b * 0.168);
+//	float fb = (c.r * 0.272) + (c.g * 0.534) + (c.b * 0.131);
+//	vec3 new_tone = rgb2hsv(vec3(fr,fg,fb));
+//	new_tone.r = 0.67;
+//	new_tone = hsv2rgb(new_tone);
+//	c.rgb = mix(c.rgb, new_tone, 0.2 * (1.0 - tone_lum));
+	
+	// Vignette
+	float vignette = 1.0 - distance(SCREEN_UV * vec2(1.0, 0.8), vec2(0.5, 0.5)* vec2(1.0, 0.8)) * 2.0;
+//	vignette = smoothstep(-0.75, 0.75, vignette);
+	vignette = clamp((vignette / 2.0 + 0.5) + lum, 0.0, 1.0);
+	c.rgb *= vignette;
+	
+	// Final adjustments
+//	float lo_r = c.r * c.r;
+//	float lo_g = c.g * c.g;
+//	float lo_b = c.b * c.b;
+//	float hi_r = 1.0 - (1.0-c.r) * (1.0-c.r);
+//	float hi_g = 1.0 - (1.0-c.g) * (1.0-c.g);
+//	float hi_b = 1.0 - (1.0-c.b) * (1.0-c.b);
+//	vec3 curved = mix(vec3(lo_r, lo_g, lo_b), vec3(hi_r, hi_g, hi_b), lum);
+//	COLOR.rgb = mix(c.rgb, curved, 0.5);
+
+	COLOR.r = clamp(c.r, 0.0, 1.0);
+	COLOR.g = clamp(c.g, 0.0, 1.0);
+	COLOR.b = clamp(c.b, 0.0, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=37]
+
+render_priority = 0
+shader = SubResource( 36 )
+shader_param/brightness = 1.0
+shader_param/contrast = 1.0
+shader_param/saturation = 1.0
+
+[node name="Game" type="Node"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource( 1 )
+script = ExtResource( 2 )
+dlabel = NodePath("../Control/DebugLabel")
+wind_tex = SubResource( 2 )
+sun = NodePath("Sun")
+clouds = NodePath("Clouds")
+water = NodePath("Water")
+day_color_sun = Color( 1, 1, 1, 1 )
+day_color_sky = Color( 0.388235, 0.490196, 0.890196, 1 )
+day_color_horizon = Color( 0.817383, 0.883606, 0.96875, 1 )
+sunset_color_sun = Color( 1, 0.376471, 0, 1 )
+sunset_color_sky = Color( 0, 0.007843, 0.215686, 1 )
+sunset_color_horizon = Color( 0.545098, 0.167647, 0.105882, 1 )
+night_color_sun = Color( 0.117647, 0.12549, 0.219608, 1 )
+night_color_sky = Color( 0.023529, 0.023529, 0.031373, 1 )
+night_color_horizon = Color( 0.047059, 0.054902, 0.164706, 1 )
+dawn_color_sun = Color( 1, 0.678431, 0, 1 )
+dawn_color_sky = Color( 0, 0.082353, 0.215686, 1 )
+dawn_color_horizon = Color( 0.545098, 0.188235, 0.105882, 1 )
+
+[node name="Camera" type="Camera" parent="WorldEnvironment"]
+transform = Transform( 1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.5, 3 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = false
+fov = 70.0
+size = 1.0
+near = 0.05
+far = 100.0
+script = ExtResource( 3 )
+invert_mouse = true
+
+[node name="Sun" type="DirectionalLight" parent="WorldEnvironment"]
+transform = Transform( -0.999164, -0.0254607, -0.0320002, -0.0390469, 0.826485, 0.561602, 0.0121489, 0.562382, -0.826788, 0, 0, 35.7631 )
+layers = 1
+light_color = Color( 1, 1, 1, 1 )
+light_energy = 1.0
+light_indirect_energy = 1.0
+light_negative = false
+light_specular = 0.5
+light_bake_mode = 1
+light_cull_mask = -1
+shadow_enabled = false
+shadow_color = Color( 0, 0, 0, 1 )
+shadow_bias = 0.1
+shadow_contact = 0.0
+shadow_reverse_cull_face = false
+editor_only = false
+directional_shadow_mode = 2
+directional_shadow_split_1 = 0.1
+directional_shadow_split_2 = 0.2
+directional_shadow_split_3 = 0.5
+directional_shadow_blend_splits = false
+directional_shadow_normal_bias = 0.8
+directional_shadow_bias_split_scale = 0.25
+directional_shadow_depth_range = 0
+directional_shadow_max_distance = 128.0
+
+[node name="Clouds" type="MeshInstance" parent="WorldEnvironment" groups=[
+"Wind",
+]]
+transform = Transform( 13.2385, 0, 0, 0, 13.2385, 0, 0, 0, 13.2385, -1.6521, 12.5305, 0 )
+layers = 1
+material_override = ExtResource( 4 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 3 )
+skeleton = NodePath("..")
+material/0 = null
+script = ExtResource( 5 )
+sun = NodePath("../Sun")
+
+[node name="Ground" type="MeshInstance" parent="WorldEnvironment"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.559 )
+layers = 1
+material_override = ExtResource( 6 )
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 4 )
+skeleton = NodePath("..")
+material/0 = null
+script = ExtResource( 7 )
+world = NodePath("..")
+
+[node name="Water" type="MeshInstance" parent="WorldEnvironment" groups=[
+"Wind",
+]]
+editor/display_folded = true
+layers = 1
+material_override = SubResource( 7 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 8 )
+skeleton = NodePath("..")
+material/0 = null
+script = ExtResource( 9 )
+
+[node name="Lod" type="MeshInstance" parent="WorldEnvironment/Water"]
+layers = 1
+material_override = ExtResource( 10 )
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 9 )
+skeleton = NodePath("..")
+material/0 = null
+
+[node name="GroundObjs" type="Spatial" parent="WorldEnvironment"]
+editor/display_folded = true
+
+[node name="Spruce" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs" groups=[
+"Wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 0 )
+layers = 1
+material_override = ExtResource( 11 )
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 10 )
+script = ExtResource( 13 )
+world = NodePath("../..")
+verbose = false
+far_distance = 0.2
+far_fade = false
+spacing = 8.0
+treshold = 0.64
+area_treshold = 0.6
+area_size = 10.0
+slope_min = 0.0
+slope_max = 0.3
+align_with_ground = false
+altitude_min = 30.0
+altitude_max = 200.0
+base_scale = 2.0
+random_scale = 1.0
+index = 1
+
+[node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Spruce"]
+layers = 1
+material_override = SubResource( 11 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 12 )
+
+[node name="Grass" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs" groups=[
+"Wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 0 )
+visible = false
+layers = 1
+material_override = SubResource( 14 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 15 )
+script = ExtResource( 13 )
+world = NodePath("../..")
+verbose = false
+far_distance = 0.02
+far_fade = true
+spacing = 1.0
+treshold = 0.55
+area_treshold = 0.0
+area_size = 0.5
+slope_min = 0.0
+slope_max = 0.6
+align_with_ground = true
+altitude_min = 16.0
+altitude_max = 128.0
+base_scale = 0.05
+random_scale = 0.3
+index = 3
+
+[node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Grass"]
+layers = 1
+material_override = SubResource( 17 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 18 )
+
+[node name="Rocks" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 0, 0 )
+layers = 1
+material_override = SubResource( 19 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 20 )
+script = ExtResource( 13 )
+world = NodePath("../..")
+verbose = false
+far_distance = 0.05
+far_fade = false
+spacing = 1.5
+treshold = 0.45
+area_treshold = 0.82
+area_size = 0.25
+slope_min = 0.0
+slope_max = 0.6
+align_with_ground = true
+altitude_min = -3.0
+altitude_max = 1024.0
+base_scale = 3.1
+random_scale = 3.0
+index = 3
+
+[node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Rocks"]
+layers = 1
+material_override = SubResource( 19 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 21 )
+
+[node name="Rocks2" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 0, 0 )
+layers = 1
+material_override = SubResource( 19 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 22 )
+script = ExtResource( 13 )
+world = NodePath("../..")
+verbose = false
+far_distance = 0.02
+far_fade = false
+spacing = 0.5
+treshold = 0.45
+area_treshold = 0.8
+area_size = 0.25
+slope_min = 0.0
+slope_max = 0.6
+align_with_ground = true
+altitude_min = 128.0
+altitude_max = 1024.0
+base_scale = 1.1
+random_scale = 0.5
+index = 8
+
+[node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Rocks2"]
+layers = 1
+material_override = SubResource( 19 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 23 )
+
+[node name="Plant 1" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs" groups=[
+"Wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16 )
+layers = 1
+material_override = SubResource( 24 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 25 )
+script = ExtResource( 13 )
+world = NodePath("../..")
+verbose = false
+far_distance = 0.04
+far_fade = false
+spacing = 2.0
+treshold = 0.5
+area_treshold = 0.7
+area_size = 2.0
+slope_min = 0.0
+slope_max = 0.6
+align_with_ground = true
+altitude_min = 0.0
+altitude_max = 6.0
+base_scale = 2.0
+random_scale = 1.0
+index = 6
+
+[node name="Plant 2" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs" groups=[
+"Wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 16 )
+layers = 1
+material_override = SubResource( 26 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 27 )
+script = ExtResource( 13 )
+world = NodePath("../..")
+verbose = false
+far_distance = 0.05
+far_fade = false
+spacing = 3.0
+treshold = 0.42
+area_treshold = 0.72
+area_size = 4.0
+slope_min = 0.0
+slope_max = 0.6
+align_with_ground = true
+altitude_min = 6.0
+altitude_max = 160.0
+base_scale = 0.3
+random_scale = 0.2
+index = 7
+
+[node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Plant 2"]
+layers = 1
+material_override = SubResource( 28 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 29 )
+
+[node name="Plant 3" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs" groups=[
+"Wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 16 )
+layers = 1
+material_override = SubResource( 30 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 31 )
+script = ExtResource( 13 )
+world = NodePath("../..")
+verbose = false
+far_distance = 0.05
+far_fade = false
+spacing = 1.5
+treshold = 0.0
+area_treshold = 0.78
+area_size = 1.0
+slope_min = 0.0
+slope_max = 0.6
+align_with_ground = true
+altitude_min = -3.0
+altitude_max = -0.2
+base_scale = 0.3
+random_scale = 0.2
+index = 8
+
+[node name="Shrooms" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
+layers = 1
+material_override = SubResource( 32 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 33 )
+script = ExtResource( 13 )
+world = NodePath("../..")
+verbose = false
+far_distance = 0.02
+far_fade = false
+spacing = 1.0
+treshold = 0.0
+area_treshold = 0.8
+area_size = 0.5
+slope_min = 0.0
+slope_max = 0.6
+align_with_ground = false
+altitude_min = 28.0
+altitude_max = 43.0
+base_scale = 0.4
+random_scale = 0.2
+index = 4
+
+[node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Shrooms"]
+layers = 1
+material_override = SubResource( 34 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 35 )
+
+[node name="Control" type="Control" parent="."]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+
+[node name="DebugLabel" type="Label" parent="Control"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 40.0
+margin_bottom = 14.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Hi"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="PostProcessing" type="ColorRect" parent="Control"]
+visible = false
+material = SubResource( 37 )
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 1, 1, 1, 1 )
+
+[node name="Music" type="Node" parent="."]
+script = ExtResource( 23 )
+enabled = true
+
+[node name="Drums" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource( 24 )
+volume_db = -80.0
+pitch_scale = 1.0
+autoplay = true
+stream_paused = false
+mix_target = 0
+bus = "Drums"
+
+[node name="Bass" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource( 25 )
+volume_db = -80.0
+pitch_scale = 1.0
+autoplay = true
+stream_paused = false
+mix_target = 0
+bus = "Bass"
+
+[node name="Cheese" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource( 26 )
+volume_db = -80.0
+pitch_scale = 1.0
+autoplay = true
+stream_paused = false
+mix_target = 0
+bus = "Cheese"
+
+[node name="Pad" type="AudioStreamPlayer" parent="Music"]
+stream = ExtResource( 27 )
+volume_db = -80.0
+pitch_scale = 1.0
+autoplay = true
+stream_paused = false
+mix_target = 0
+bus = "Pad"
+
