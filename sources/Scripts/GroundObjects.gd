@@ -97,12 +97,12 @@ func _ready():
 	var fade_start = fade_end - 24.0
 	
 #	print("Max ", name, " instances: ", max_instances)
-#	multimesh.set_instance_count(max_instances)
+	multimesh.set_instance_count(max_instances)
 	
 	if(has_node("Lod")):
 		lod_multimesh = get_node("Lod")
 #		print("Max ", name, "_lod instances: ", max_instances)
-#		lod_multimesh.multimesh.set_instance_count(max_instances)
+		lod_multimesh.multimesh.set_instance_count(max_instances)
 		has_lod = true
 		
 		if(far_fade):
