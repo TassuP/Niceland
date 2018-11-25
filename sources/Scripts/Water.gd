@@ -9,6 +9,7 @@ func _ready():
 	world = get_parent()
 	var s = world.ground_size / 1024.0
 	$Lod.scale = Vector3(s, 1.0, s) * 2.0
+	show()
 
 func _process(delta):
 	var cam = get_viewport().get_camera()

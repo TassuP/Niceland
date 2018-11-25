@@ -41,6 +41,10 @@ var lod_dist = 16.0
 var has_lod = false
 var use_only_lod = false
 
+var has_collider = false
+var col_shape
+export (Mesh) var collision_mesh
+
 var hidden_transform
 
 # Functions 'make_noise' and 'get_h' should be copied to
@@ -108,6 +112,15 @@ func _ready():
 		if(far_fade):
 			$Lod.material_override.set_shader_param("fade_start", fade_start);
 			$Lod.material_override.set_shader_param("fade_end", fade_end);
+	
+	if(collision_mesh != null):
+		has_collider = true
+		col_shape = collision_mesh.create_convex_shape()
+		var st = StaticBody.new()
+		st.name = "Collider"
+		add_child(st)
+	
+	
 	
 	index = float(index) * 123.456
 	
@@ -189,6 +202,39 @@ func finish_generating():
 				multimesh.set_instance_transform(i, hidden_transform)
 			i += 1
 	
+	
+	# Add collision shapes to $Collider
+	if(has_collider):
+		i = 0
+		# Disable all collision shapes at first
+		while(i < $Collider.get_child_count()):
+			var cs = $Collider.get_child(i)
+			cs.transform = hidden_transform
+			cs.disabled = true
+			cs.hide()
+			i += 1
+		i = 0
+		while(i < arr.size()):
+			
+			# Add a new CollisionShape to pool
+			if(i >= $Collider.get_child_count()):
+				if(verbose):
+					print("Increase ",name, " collision shape count to ", i + 1)
+				var new_cs = CollisionShape.new()
+				new_cs.set_shape(col_shape)
+				new_cs.transform = arr[i]
+				$Collider.add_child(new_cs, true)
+			
+			# Enable shape and set it's transform
+			var cs = $Collider.get_child(i)
+			cs.transform = arr[i]
+			cs.disabled = false
+			cs.show()
+			i += 1
+	
+	
+	
+	
 	gen_time = OS.get_ticks_msec() - gen_time
 	if(verbose or gen_time >= 2000.0):
 		print(name," x ", arr.size()," in ", gen_time / 1000.0, " s")
@@ -256,7 +302,7 @@ func generate(userdata):
 							var xa = -difz / 7.0
 							var za = difx / 7.0
 #							var tr = Transform(transform.basis.rotated(Vector3(0,1,0), ya), p / s).scaled(Vector3(s, s, s))
-							var tr = Transform.IDENTITY
+							var tr = Transform.IDENTITY.rotated(Vector3(0,1,0), ya)
 							
 							if(align_with_ground):
 								var quat = Quat(tr.basis)

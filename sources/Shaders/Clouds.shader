@@ -77,7 +77,8 @@ void fragment() {
 	
 	// Starsky
 	float star = smoothstep(0.8, 1.0, stars_tex.r);
-	star *= 1.0 - smoothstep(-0.3, 0.3, sun_dir.y);
+	float sdot = sun_dot / 2.0 + 0.5;
+	star *= (1.0 - smoothstep(-0.5, 0.3, sun_dir.y)) * (1.0 - sdot);
 	ALBEDO += vec3(star / 2.0) * (1.0 - a);
 	float alpha = max(a, star);
 

@@ -34,6 +34,7 @@ func _ready():
 	noise = make_noise(world.game_seed)
 	get_viewport().get_camera().far = world.ground_size
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	$"Map symbol".show()
 
 func _physics_process(delta):
 	
@@ -60,6 +61,13 @@ func _physics_process(delta):
 	
 	# Smooth apply
 	transform = transform.interpolate_with(target_trans.transform, clamp(delta * 2.0, 0.0, 1.0))
+	
+	# Teleport
+	if(Input.is_key_pressed(KEY_T)):
+		var r = target_trans.transform.origin
+		r.x = (randf() - randf()) * 100000.0
+		r.z = (randf() - randf()) * 100000.0
+		target_trans.transform.origin += r
 
 func _input(event):
 	# Mouselook
