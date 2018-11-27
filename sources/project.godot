@@ -19,6 +19,10 @@ config/name="Nice"
 run/main_scene="res://Scenes/Game.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/vsync/use_vsync=false
+
 [layer_names]
 
 3d_render/layer_2="Map"

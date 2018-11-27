@@ -46,31 +46,10 @@ var col_shape
 export (Mesh) var collision_mesh
 
 var hidden_transform
-
-# Functions 'make_noise' and 'get_h' should be copied to
-# other scripts that need the same height data.
-func make_noise(_seed):
-	var noise = OpenSimplexNoise.new()
-	noise.seed = _seed
-	noise.octaves = 6
-	noise.period = 1024 * 2.0
-	noise.persistence = 0.4
-	noise.lacunarity = 2.5
-	return noise
-func get_h(noise, pos):
-	pos.y = noise.get_noise_2d(pos.x, pos.z)
-	pos.y *= 0.1 + pos.y * pos.y
-	pos.y *= 1024.0
-	# Make waterlines nicer
-	pos.y += 5.0
-	if(pos.y <= 0.2):
-		pos.y -= 1.0
-	else:
-		pos.y += 0.2
-	return pos.y
+var noise = preload("res://Scripts/HeightGenerator.gd").new()
 
 func _ready():
-	
+	noise.init()
 	set_process(false)
 	if(is_visible_in_tree() == false):
 		return
@@ -245,8 +224,6 @@ func finish_generating():
 func generate(userdata):
 	
 	var pos = userdata[0]
-	var noise_h = make_noise(userdata[1])
-	var noise_r = make_noise(userdata[1] + index)
 	var arr = []
 	
 	pos.x = stepify(pos.x, spacing)
@@ -261,13 +238,13 @@ func generate(userdata):
 			var xx = x + pos.x
 			var zz = z + pos.z
 			
-			var r = noise_r.get_noise_2d(xx * 123.0 / area_size, zz * 123.0 / area_size) / 2.0 + 0.5
+			var r = noise._noise.get_noise_2d(xx * 123.0 / area_size, zz * 123.0 / area_size) / 2.0 + 0.5
 #			var tres_noise = 0.5 +  r
 			
 			if(r >= area_treshold):
 				var rp = Vector3(r, 0.0, 0.0)
 				
-				r = noise_r.get_noise_2d(xx * 1234.0, zz * 1234.0) / 2.0 + 0.5
+				r = noise._noise.get_noise_2d(xx * 1234.0, zz * 1234.0) / 2.0 + 0.5
 				if(r >= treshold):
 					
 					# Randomize position
@@ -277,14 +254,14 @@ func generate(userdata):
 					zz += cos(rp.z) * spacing
 					
 					# Y-position
-					var y = get_h(noise_h, Vector3(xx, 0.0, zz)) + 0.3
+					var y = noise.get_h(Vector3(xx, 0.0, zz)) + 0.3
 					if(y >= altitude_min && y <= altitude_max):
 						
 						# Slopes
-						var difx = get_h(noise_h, Vector3(xx + 2.0, 0.0, zz))
-						difx -= get_h(noise_h, Vector3(xx - 2.0, 0.0, zz))
-						var difz = get_h(noise_h, Vector3(xx, 0.0, zz + 2.0))
-						difz -= get_h(noise_h, Vector3(xx, 0.0, zz - 2.0))
+						var difx = noise.get_h(Vector3(xx + 2.0, 0.0, zz))
+						difx -= noise.get_h(Vector3(xx - 2.0, 0.0, zz))
+						var difz = noise.get_h(Vector3(xx, 0.0, zz + 2.0))
+						difz -= noise.get_h(Vector3(xx, 0.0, zz - 2.0))
 						
 						var dif = max(abs(difx), abs(difz)) / 5.0
 #						print(dif)
@@ -293,7 +270,7 @@ func generate(userdata):
 							var p = Vector3(xx - pos.x, y, zz  - pos.z)
 							
 							# Randomize scale
-							var s = sin(noise_r.get_noise_2d((xx) * 1000.0 + (zz) * 1000.0, 0.0) * 100.0)
+							var s = sin(noise._noise.get_noise_2d((xx) * 1000.0 + (zz) * 1000.0, 0.0) * 100.0)
 							s = base_scale + (s * random_scale)
 #							print(base_scale)
 							

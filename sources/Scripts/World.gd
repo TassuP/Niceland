@@ -77,8 +77,8 @@ func _ready():
 	
 	randomize()
 	game_seed = randi()
-	environment.set_dof_blur_far_distance(ground_size * 0.4)
-	environment.set_dof_blur_far_transition(ground_size * 0.125)
+	environment.set_dof_blur_far_distance(64.0)
+	environment.set_dof_blur_far_transition(ground_size * 0.5)
 	
 	
 

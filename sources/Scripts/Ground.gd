@@ -1,4 +1,3 @@
-#tool
 extends MeshInstance
 
 # World node is optional
@@ -10,7 +9,7 @@ var game_seed = 0
 var ground_size = 1024 * 2
 var ground_lod_step = 4.0
 
-
+var noise = preload("res://Scripts/HeightGenerator.gd").new()
 
 var thread = Thread.new()
 var gen_verts = []
@@ -21,29 +20,9 @@ var gen_time
 var near_far_limit_i = 0
 var upd_distance = 16
 
-# Functions 'make_noise' and 'get_h' should be copied to
-# other scripts that need the same height data.
-func make_noise(_seed):
-	var noise = OpenSimplexNoise.new()
-	noise.seed = _seed
-	noise.octaves = 6
-	noise.period = 1024 * 2.0
-	noise.persistence = 0.4
-	noise.lacunarity = 2.5
-	return noise
-func get_h(noise, pos):
-	pos.y = noise.get_noise_2d(pos.x, pos.z)
-	pos.y *= 0.1 + pos.y * pos.y
-	pos.y *= 1024.0
-	# Make waterlines nicer
-	pos.y += 5.0
-	if(pos.y <= 0.2):
-		pos.y -= 1.0
-	else:
-		pos.y += 0.2
-	return pos.y
-
 func _ready():
+	
+	noise.init()
 	
 	if(world != null):
 		print("Copying ground settings from World")
@@ -53,7 +32,7 @@ func _ready():
 		ground_lod_step = world.ground_lod_step
 	else:
 		print("Using default settings for ground")
-		
+	
 	set_process(false)
 	
 	upd_distance = float(ground_size) / 16.0
@@ -92,11 +71,22 @@ func finish_generating():
 	var msh = thread.wait_to_finish()
 	self.set_mesh(msh)
 	
+	# TODO: Collider generation. I think Godot has a bug...
+	
+#	$StaticBody/CollisionShape.set_shape(msh.create_trimesh_shape())
+#	print("surf count ",msh.get_surface_count())
+#	print("face count ",msh.get_faces().size())
+	
+	# Generate collider
+#	var shp = ConcavePolygonShape.new()
+#	shp.set_faces(msh.get_faces())
+#	col_shape.set_shape(shp)
+#	col_shape.set_disabled(false)
+	
 	# Generate collider
 #	col_shape.set_faces(msh.get_faces())
-#	col.set_shape(col_shape)
-#	col.set_disabled(false)
-#	col.set_translation(gen_point)
+#	$Collider/CollisionShape.set_shape(col_shape)
+#	$Collider/CollisionShape.set_disabled(false)
 	
 	gen_time = OS.get_ticks_msec() - gen_time
 	print("Ground generated in ", gen_time, " msec")
@@ -108,7 +98,6 @@ func finish_generating():
 func generate(userdata):
 	
 	var pos = userdata[0]
-	var noise = make_noise(userdata[1])
 	var surf = SurfaceTool.new()
 	
 	# Generate surface
@@ -119,7 +108,7 @@ func generate(userdata):
 		
 		# Generate vertex position
 		var p = gen_verts[i] + pos
-		p.y = get_h(noise, p)
+		p.y = noise.get_h(p)
 		
 		# Generate UV
 		if(i < near_far_limit_i):
