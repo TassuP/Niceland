@@ -6,8 +6,8 @@ export (NodePath) var world
 # If the world node is found, then the following variables
 # will be copied from there.
 var game_seed = 0
-var ground_size = 1024 * 2
-var ground_lod_step = 4.0
+var ground_size = 1024.0 * 2.0
+var ground_lod_step = 8.0
 
 var noise = preload("res://Scripts/HeightGenerator.gd").new()
 

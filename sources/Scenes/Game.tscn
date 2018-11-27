@@ -387,7 +387,7 @@ transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 color_array = PoolColorArray(  )
 custom_data_array = PoolColorArray(  )
 
-[sub_resource type="SpatialMaterial" id=20]
+[sub_resource type="SpatialMaterial" id=18]
 
 render_priority = 0
 flags_transparent = false
@@ -442,7 +442,7 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_mode = 0
 
-[sub_resource type="MultiMesh" id=21]
+[sub_resource type="MultiMesh" id=19]
 
 color_format = 0
 transform_format = 1
@@ -453,7 +453,7 @@ transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 color_array = PoolColorArray(  )
 custom_data_array = PoolColorArray(  )
 
-[sub_resource type="Shader" id=22]
+[sub_resource type="Shader" id=20]
 
 code = "shader_type spatial;
 render_mode blend_mix,depth_draw_always,cull_disabled,diffuse_burley,specular_disabled,vertex_lighting;
@@ -488,10 +488,10 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=23]
+[sub_resource type="ShaderMaterial" id=21]
 
 render_priority = 0
-shader = SubResource( 22 )
+shader = SubResource( 20 )
 shader_param/wind_uv_offset = Vector2( 0, 0 )
 shader_param/wind_dir = Vector2( 0, 0 )
 shader_param/wind_speed = 0.1
@@ -500,7 +500,7 @@ shader_param/wind_scale = 0.04
 shader_param/albedo = Color( 0.666667, 0.584314, 0.368627, 1 )
 shader_param/ground_color = Color( 0.6, 0.521569, 0.329412, 1 )
 
-[sub_resource type="MultiMesh" id=24]
+[sub_resource type="MultiMesh" id=22]
 
 color_format = 0
 transform_format = 1
@@ -511,7 +511,7 @@ transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 color_array = PoolColorArray(  )
 custom_data_array = PoolColorArray(  )
 
-[sub_resource type="Shader" id=25]
+[sub_resource type="Shader" id=23]
 
 code = "shader_type spatial;
 render_mode blend_mix,depth_draw_always,cull_disabled,diffuse_burley,specular_disabled,vertex_lighting;
@@ -533,16 +533,16 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=26]
+[sub_resource type="ShaderMaterial" id=24]
 
 render_priority = 0
-shader = SubResource( 25 )
+shader = SubResource( 23 )
 shader_param/albedo = Color( 0.713726, 0.623529, 0.396078, 1 )
 shader_param/ground_color = Color( 0.6, 0.521569, 0.329412, 1 )
 shader_param/fade_start = 16.0
 shader_param/fade_end = 32.0
 
-[sub_resource type="MultiMesh" id=27]
+[sub_resource type="MultiMesh" id=25]
 
 color_format = 0
 transform_format = 1
@@ -553,7 +553,7 @@ transform_array = PoolVector3Array(  )
 color_array = PoolColorArray(  )
 custom_data_array = PoolColorArray(  )
 
-[sub_resource type="SpatialMaterial" id=28]
+[sub_resource type="SpatialMaterial" id=26]
 
 render_priority = 0
 flags_transparent = false
@@ -608,6 +608,28 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_mode = 0
 
+[sub_resource type="MultiMesh" id=27]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 1
+mesh = ExtResource( 18 )
+transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
+[sub_resource type="MultiMesh" id=28]
+
+color_format = 0
+transform_format = 1
+custom_data_format = 0
+instance_count = 0
+mesh = ExtResource( 19 )
+transform_array = PoolVector3Array(  )
+color_array = PoolColorArray(  )
+custom_data_array = PoolColorArray(  )
+
 [sub_resource type="MultiMesh" id=29]
 
 color_format = 0
@@ -630,32 +652,10 @@ transform_array = PoolVector3Array(  )
 color_array = PoolColorArray(  )
 custom_data_array = PoolColorArray(  )
 
-[sub_resource type="MultiMesh" id=31]
-
-color_format = 0
-transform_format = 1
-custom_data_format = 0
-instance_count = 1
-mesh = ExtResource( 18 )
-transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-color_array = PoolColorArray(  )
-custom_data_array = PoolColorArray(  )
-
-[sub_resource type="MultiMesh" id=32]
-
-color_format = 0
-transform_format = 1
-custom_data_format = 0
-instance_count = 0
-mesh = ExtResource( 19 )
-transform_array = PoolVector3Array(  )
-color_array = PoolColorArray(  )
-custom_data_array = PoolColorArray(  )
-
-[sub_resource type="ShaderMaterial" id=33]
+[sub_resource type="ShaderMaterial" id=31]
 
 render_priority = 0
-shader = SubResource( 22 )
+shader = SubResource( 20 )
 shader_param/wind_uv_offset = Vector2( 0, 0 )
 shader_param/wind_dir = Vector2( 0, 0 )
 shader_param/wind_speed = 0.1
@@ -664,7 +664,7 @@ shader_param/wind_scale = 0.07
 shader_param/albedo = Color( 0.419608, 0.733333, 0.415686, 1 )
 shader_param/ground_color = Color( 0.254902, 0.529412, 0.254902, 1 )
 
-[sub_resource type="MultiMesh" id=34]
+[sub_resource type="MultiMesh" id=32]
 
 color_format = 0
 transform_format = 1
@@ -675,10 +675,10 @@ transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 color_array = PoolColorArray(  )
 custom_data_array = PoolColorArray(  )
 
-[sub_resource type="ShaderMaterial" id=35]
+[sub_resource type="ShaderMaterial" id=33]
 
 render_priority = 0
-shader = SubResource( 22 )
+shader = SubResource( 20 )
 shader_param/wind_uv_offset = Vector2( 0, 0 )
 shader_param/wind_dir = Vector2( 0, 0 )
 shader_param/wind_speed = 0.1
@@ -687,7 +687,7 @@ shader_param/wind_scale = 0.02
 shader_param/albedo = Color( 0.490196, 0.262745, 0.184314, 1 )
 shader_param/ground_color = Color( 0.415686, 0.247059, 0.12549, 1 )
 
-[sub_resource type="MultiMesh" id=36]
+[sub_resource type="MultiMesh" id=34]
 
 color_format = 0
 transform_format = 1
@@ -698,16 +698,16 @@ transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 color_array = PoolColorArray(  )
 custom_data_array = PoolColorArray(  )
 
-[sub_resource type="ShaderMaterial" id=37]
+[sub_resource type="ShaderMaterial" id=35]
 
 render_priority = 0
-shader = SubResource( 25 )
+shader = SubResource( 23 )
 shader_param/albedo = Color( 0.490196, 0.262745, 0.184314, 1 )
 shader_param/ground_color = Color( 0.415686, 0.247059, 0.12549, 1 )
 shader_param/fade_start = 16.0
 shader_param/fade_end = 32.0
 
-[sub_resource type="MultiMesh" id=38]
+[sub_resource type="MultiMesh" id=36]
 
 color_format = 0
 transform_format = 1
@@ -718,7 +718,7 @@ transform_array = PoolVector3Array(  )
 color_array = PoolColorArray(  )
 custom_data_array = PoolColorArray(  )
 
-[sub_resource type="SpatialMaterial" id=39]
+[sub_resource type="SpatialMaterial" id=37]
 
 render_priority = 0
 flags_transparent = false
@@ -773,7 +773,7 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_mode = 0
 
-[sub_resource type="MultiMesh" id=40]
+[sub_resource type="MultiMesh" id=38]
 
 color_format = 0
 transform_format = 1
@@ -784,7 +784,7 @@ transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 color_array = PoolColorArray(  )
 custom_data_array = PoolColorArray(  )
 
-[sub_resource type="SpatialMaterial" id=41]
+[sub_resource type="SpatialMaterial" id=39]
 
 render_priority = 0
 flags_transparent = false
@@ -839,7 +839,7 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_mode = 0
 
-[sub_resource type="MultiMesh" id=42]
+[sub_resource type="MultiMesh" id=40]
 
 color_format = 0
 transform_format = 1
@@ -850,7 +850,7 @@ transform_array = PoolVector3Array(  )
 color_array = PoolColorArray(  )
 custom_data_array = PoolColorArray(  )
 
-[sub_resource type="SpatialMaterial" id=43]
+[sub_resource type="SpatialMaterial" id=41]
 
 render_priority = 0
 flags_transparent = false
@@ -905,7 +905,7 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_mode = 0
 
-[sub_resource type="PrismMesh" id=44]
+[sub_resource type="PrismMesh" id=42]
 
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 flip_faces = false
@@ -915,7 +915,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[sub_resource type="Shader" id=45]
+[sub_resource type="Shader" id=43]
 
 code = "shader_type canvas_item;
 
@@ -998,15 +998,15 @@ void fragment() {
 	COLOR.b = clamp(c.b, 0.0, 1.0);
 }"
 
-[sub_resource type="ShaderMaterial" id=46]
+[sub_resource type="ShaderMaterial" id=44]
 
 render_priority = 0
-shader = SubResource( 45 )
+shader = SubResource( 43 )
 shader_param/brightness = 1.0
 shader_param/contrast = 1.0
 shader_param/saturation = 1.0
 
-[sub_resource type="ViewportTexture" id=47]
+[sub_resource type="ViewportTexture" id=45]
 
 resource_local_to_scene = true
 flags = 0
@@ -1281,7 +1281,7 @@ collision_mesh = ExtResource( 15 )
 [node name="Oak leaves" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 31.4419, 0, 0 )
 layers = 1
-material_override = SubResource( 20 )
+material_override = SubResource( 18 )
 cast_shadow = 1
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -1289,7 +1289,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-multimesh = SubResource( 21 )
+multimesh = SubResource( 19 )
 script = ExtResource( 13 )
 world = NodePath("../..")
 verbose = false
@@ -1315,7 +1315,7 @@ collision_mesh = null
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 0 )
 layers = 1
-material_override = SubResource( 23 )
+material_override = SubResource( 21 )
 cast_shadow = 0
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -1323,7 +1323,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-multimesh = SubResource( 24 )
+multimesh = SubResource( 22 )
 script = ExtResource( 13 )
 world = NodePath("../..")
 verbose = false
@@ -1345,6 +1345,20 @@ collision_mesh = null
 
 [node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Grass"]
 layers = 1
+material_override = SubResource( 24 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 25 )
+
+[node name="Rocks" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 0, 0 )
+layers = 1
 material_override = SubResource( 26 )
 cast_shadow = 0
 extra_cull_margin = 0.0
@@ -1354,20 +1368,6 @@ lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 multimesh = SubResource( 27 )
-
-[node name="Rocks" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
-editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 0, 0 )
-layers = 1
-material_override = SubResource( 28 )
-cast_shadow = 0
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-multimesh = SubResource( 29 )
 script = ExtResource( 13 )
 world = NodePath("../..")
 verbose = true
@@ -1389,7 +1389,7 @@ collision_mesh = ExtResource( 19 )
 
 [node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Rocks"]
 layers = 1
-material_override = SubResource( 28 )
+material_override = SubResource( 26 )
 cast_shadow = 0
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -1397,13 +1397,13 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-multimesh = SubResource( 30 )
+multimesh = SubResource( 28 )
 
 [node name="Rocks2" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 0, 0 )
 layers = 1
-material_override = SubResource( 28 )
+material_override = SubResource( 26 )
 cast_shadow = 0
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -1411,7 +1411,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-multimesh = SubResource( 31 )
+multimesh = SubResource( 29 )
 script = ExtResource( 13 )
 world = NodePath("../..")
 verbose = false
@@ -1433,7 +1433,22 @@ collision_mesh = ExtResource( 19 )
 
 [node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Rocks2"]
 layers = 1
-material_override = SubResource( 28 )
+material_override = SubResource( 26 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 30 )
+
+[node name="Plant" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs" groups=[
+"Wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16 )
+layers = 1
+material_override = SubResource( 31 )
 cast_shadow = 0
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -1442,21 +1457,6 @@ lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 multimesh = SubResource( 32 )
-
-[node name="Plant" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs" groups=[
-"Wind",
-]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16 )
-layers = 1
-material_override = SubResource( 33 )
-cast_shadow = 0
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-multimesh = SubResource( 34 )
 script = ExtResource( 13 )
 world = NodePath("../..")
 verbose = false
@@ -1481,7 +1481,7 @@ collision_mesh = null
 ]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 16 )
 layers = 1
-material_override = SubResource( 35 )
+material_override = SubResource( 33 )
 cast_shadow = 0
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -1489,7 +1489,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-multimesh = SubResource( 36 )
+multimesh = SubResource( 34 )
 script = ExtResource( 13 )
 world = NodePath("../..")
 verbose = false
@@ -1511,6 +1511,19 @@ collision_mesh = null
 
 [node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Bush"]
 layers = 1
+material_override = SubResource( 35 )
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+multimesh = SubResource( 36 )
+
+[node name="Shrooms" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
+editor/display_folded = true
+layers = 1
 material_override = SubResource( 37 )
 cast_shadow = 0
 extra_cull_margin = 0.0
@@ -1520,19 +1533,6 @@ lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 multimesh = SubResource( 38 )
-
-[node name="Shrooms" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
-editor/display_folded = true
-layers = 1
-material_override = SubResource( 39 )
-cast_shadow = 0
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-multimesh = SubResource( 40 )
 script = ExtResource( 13 )
 world = NodePath("../..")
 verbose = false
@@ -1554,7 +1554,7 @@ collision_mesh = ExtResource( 22 )
 
 [node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Shrooms"]
 layers = 1
-material_override = SubResource( 41 )
+material_override = SubResource( 39 )
 cast_shadow = 0
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -1562,7 +1562,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-multimesh = SubResource( 42 )
+multimesh = SubResource( 40 )
 
 [node name="Camera" type="Camera" parent="WorldEnvironment"]
 transform = Transform( 1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.5, 3 )
@@ -1585,7 +1585,7 @@ invert_mouse = true
 transform = Transform( 80, 0, 0, 0, -3.49691e-06, 10, 0, -80, -4.37114e-07, 0, -1.19209e-07, -1.49012e-07 )
 visible = false
 layers = 2
-material_override = SubResource( 43 )
+material_override = SubResource( 41 )
 cast_shadow = 0
 extra_cull_margin = 0.0
 use_in_baked_light = false
@@ -1593,7 +1593,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 44 )
+mesh = SubResource( 42 )
 skeleton = NodePath("..")
 material/0 = null
 
@@ -1630,7 +1630,7 @@ max_lines_visible = -1
 
 [node name="PostProcessing" type="ColorRect" parent="Control"]
 visible = false
-material = SubResource( 46 )
+material = SubResource( 44 )
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -1658,7 +1658,7 @@ mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = SubResource( 47 )
+texture = SubResource( 45 )
 stretch_mode = 4
 
 [node name="Music" type="Node" parent="."]
