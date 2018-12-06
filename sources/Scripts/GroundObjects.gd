@@ -19,11 +19,10 @@ export var altitude_max = 1024.0
 export var base_scale = 1.0
 export var random_scale = 0.3
 export var index = 0
-var max_instances = 0
+var pool_size = 0
 
 # If the world node is found, then the following variables
 # will be copied from there.
-var game_seed = 0
 var ground_size = 1024 * 2
 var ground_lod_step = 4.0
 
@@ -49,7 +48,7 @@ var hidden_transform
 var noise = preload("res://Scripts/HeightGenerator.gd").new()
 
 func _ready():
-	noise.init()
+	
 	set_process(false)
 	if(is_visible_in_tree() == false):
 		return
@@ -58,12 +57,13 @@ func _ready():
 		if(verbose):
 			print("Copying ground object settings from World")
 		world = get_node(world)
-		game_seed = world.game_seed
 		ground_size = world.ground_size
 		ground_lod_step = world.ground_lod_step
 	else:
 		if(verbose):
 			print("Using default settings for ground objects")
+	
+	noise.init(world)
 	
 #	view_distance = float(ground_size) / 64.0
 #	upd_distance = float(view_distance) / 8.0
@@ -79,13 +79,11 @@ func _ready():
 	var fade_end = view_distance
 	var fade_start = fade_end - 24.0
 	
-#	print("Max ", name, " instances: ", max_instances)
-	multimesh.set_instance_count(max_instances)
+	multimesh.set_instance_count(pool_size)
 	
 	if(has_node("Lod")):
 		lod_multimesh = get_node("Lod")
-#		print("Max ", name, "_lod instances: ", max_instances)
-		lod_multimesh.multimesh.set_instance_count(max_instances)
+		lod_multimesh.multimesh.set_instance_count(pool_size)
 		has_lod = true
 		
 		if(far_fade):
@@ -132,18 +130,18 @@ func start_generating():
 	view_point.x = stepify(view_point.x, spacing)
 	view_point.z = stepify(view_point.z, spacing)
 	
-	thread.start(self, "generate", [view_point, game_seed])
+	thread.start(self, "generate", view_point)
 
 func finish_generating():
 	var arr = thread.wait_to_finish()
 	
-	if(arr.size() > max_instances):
-		max_instances += (arr.size() - max_instances) * 2
-		print("Set max ", name, " count to ", max_instances)
+	if(arr.size() > pool_size):
+		pool_size += (arr.size() - pool_size) * 2
+		print("Set max ", name, " count to ", pool_size)
 		
-		multimesh.set_instance_count(max_instances)
+		multimesh.set_instance_count(pool_size)
 		if(has_lod):
-			lod_multimesh.multimesh.set_instance_count(max_instances)
+			lod_multimesh.multimesh.set_instance_count(pool_size)
 	
 	var cam_pos = get_viewport().get_camera().get_global_transform().origin
 	
@@ -162,7 +160,7 @@ func finish_generating():
 				lod_arr.append(arr[i])
 			i += 1
 		i = 0
-		while(i < max_instances):
+		while(i < pool_size):
 			if(i < new_arr.size()):
 				multimesh.set_instance_transform(i, new_arr[i])
 			else:
@@ -174,7 +172,7 @@ func finish_generating():
 			i += 1
 	else:
 		i = 0
-		while(i < max_instances):
+		while(i < pool_size):
 			if(i < arr.size()):
 				multimesh.set_instance_transform(i, arr[i])
 			else:
@@ -223,7 +221,7 @@ func finish_generating():
 
 func generate(userdata):
 	
-	var pos = userdata[0]
+	var pos = userdata
 	var arr = []
 	
 	pos.x = stepify(pos.x, spacing)

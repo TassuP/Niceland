@@ -4,9 +4,10 @@ extends WorldEnvironment
 export (NodePath) var dlabel
 
 # Random generation settings
-var game_seed = 0
-const ground_size = 1024.0 * 4.0
-const ground_lod_step = 8.0
+export var game_seed = 1
+export var ground_size = 1024.0 * 2.0
+export var ground_lod_step = 8.0
+export var ground_xz_scale = 2.0
 
 # Wind settings
 var use_wind = true

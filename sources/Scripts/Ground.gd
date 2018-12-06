@@ -5,12 +5,12 @@ export (NodePath) var world
 
 # If the world node is found, then the following variables
 # will be copied from there.
-var game_seed = 0
 var ground_size = 1024.0 * 2.0
 var ground_lod_step = 8.0
 
 var noise = preload("res://Scripts/HeightGenerator.gd").new()
 
+var use_threading = true
 var thread = Thread.new()
 var gen_verts = []
 var view_point
@@ -22,16 +22,15 @@ var upd_distance = 16
 
 func _ready():
 	
-	noise.init()
-	
 	if(world != null):
 		print("Copying ground settings from World")
 		world = get_node(world)
-		game_seed = world.game_seed
 		ground_size = world.ground_size
 		ground_lod_step = world.ground_lod_step
 	else:
 		print("Using default settings for ground")
+	
+	noise.init(world)
 	
 	set_process(false)
 	
@@ -41,7 +40,14 @@ func _ready():
 	last_point = view_point
 	
 	init_genverts()
-	call_deferred("start_generating")
+	
+	# First round of generating
+	var temp = use_threading
+	use_threading = false
+	start_generating()
+	use_threading = temp
+#
+#	call_deferred("start_generating")
 
 func get_vp():
 	var p = get_viewport().get_camera().get_global_transform().origin
@@ -58,17 +64,24 @@ func _process(delta):
 	
 
 func start_generating():
-	print("Start generating ground, seed = ", game_seed)
+#	print("Start generating ground")
 	gen_time = OS.get_ticks_msec()
 	set_process(false)
 	view_point = get_vp()
 	view_point.x = stepify(view_point.x, ground_lod_step)
 	view_point.z = stepify(view_point.z, ground_lod_step)
 	
-	thread.start(self, "generate", [view_point, game_seed])
+	if(use_threading):
+		thread.start(self, "generate", [view_point, noise])
+	else:
+		finish_generating()
 
 func finish_generating():
-	var msh = thread.wait_to_finish()
+	var msh
+	if(use_threading):
+		msh = thread.wait_to_finish()
+	else:
+		msh = generate([view_point, noise])
 	self.set_mesh(msh)
 	
 	# TODO: Collider generation. I think Godot has a bug...
@@ -129,7 +142,8 @@ func generate(userdata):
 	var msh = Mesh.new()
 	msh = surf.commit()
 	
-	call_deferred("finish_generating")
+	if(use_threading):
+		call_deferred("finish_generating")
 	return msh
 
 func init_genverts():

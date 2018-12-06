@@ -1,6 +1,6 @@
 extends MeshInstance
 
-export (NodePath) var sun
+export (NodePath) var sun # Directional light for the sun
 var use_only_lod = false # Not used
 
 func _ready():

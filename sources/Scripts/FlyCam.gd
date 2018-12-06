@@ -10,8 +10,7 @@ var noise = preload("res://Scripts/HeightGenerator.gd").new()
 func _ready():
 	target_trans.transform = transform
 	world = get_parent()
-	noise.init()
-#	noise = make_noise(world.game_seed)
+	noise.init(world)
 	get_viewport().get_camera().far = world.ground_size
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	$"Map symbol".show()
@@ -22,7 +21,7 @@ func _physics_process(delta):
 	
 	var h =  noise.get_h(transform.origin)
 	if(Input.is_key_pressed(KEY_SHIFT)):
-		spd *= 5.0
+		spd *= 15.0
 	else:
 		target_trans.transform.origin.y = h + 3
 	
