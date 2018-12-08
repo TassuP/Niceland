@@ -3,11 +3,6 @@ extends MeshInstance
 # World node is optional
 export (NodePath) var world
 
-# If the world node is found, then the following variables
-# will be copied from there.
-var ground_size = 1024.0 * 2.0
-var ground_lod_step = 8.0
-
 var noise = preload("res://Scripts/HeightGenerator.gd").new()
 
 var use_threading = true
@@ -22,19 +17,11 @@ var upd_distance = 16
 
 func _ready():
 	
-	if(world != null):
-		print("Copying ground settings from World")
-		world = get_node(world)
-		ground_size = world.ground_size
-		ground_lod_step = world.ground_lod_step
-	else:
-		print("Using default settings for ground")
-	
-	noise.init(world)
+	noise.init()
 	
 	set_process(false)
 	
-	upd_distance = float(ground_size) / 16.0
+	upd_distance = float(Globals.ground_size) / 16.0
 	
 	view_point = get_vp()
 	last_point = view_point
@@ -68,8 +55,8 @@ func start_generating():
 	gen_time = OS.get_ticks_msec()
 	set_process(false)
 	view_point = get_vp()
-	view_point.x = stepify(view_point.x, ground_lod_step)
-	view_point.z = stepify(view_point.z, ground_lod_step)
+	view_point.x = stepify(view_point.x, Globals.ground_lod_step)
+	view_point.z = stepify(view_point.z, Globals.ground_lod_step)
 	
 	if(use_threading):
 		thread.start(self, "generate", [view_point, noise])
@@ -149,15 +136,15 @@ func generate(userdata):
 func init_genverts():
 	var pi = 3.141592654
 	var pi2 = pi*2.0
-	var small_step = max(ground_lod_step / 8.0, 2.0)
+	var small_step = max(Globals.ground_lod_step / 8.0, 2.0)
 	var a = (360.0 / (360.0 / small_step)) / 57.295779515
 	
 	# Radial web
 	var x = 0.0
 	while(x < pi2):
 		var s = small_step
-		var z = ground_size / 10.0 - ground_lod_step
-		while(z <= ground_size):
+		var z = Globals.ground_size / 10.0 - Globals.ground_lod_step
+		while(z <= Globals.ground_size):
 			
 			var z1 = z
 			var z2 = z + s
@@ -180,14 +167,14 @@ func init_genverts():
 			p4.z *= cos(x)
 			
 			# Stepifying slightly helps with jumps between lods
-			p1.x = stepify(p1.x, ground_lod_step)
-			p1.z = stepify(p1.z, ground_lod_step)
-			p2.x = stepify(p2.x, ground_lod_step)
-			p2.z = stepify(p2.z, ground_lod_step)
-			p3.x = stepify(p3.x, ground_lod_step)
-			p3.z = stepify(p3.z, ground_lod_step)
-			p4.x = stepify(p4.x, ground_lod_step)
-			p4.z = stepify(p4.z, ground_lod_step)
+			p1.x = stepify(p1.x, Globals.ground_lod_step)
+			p1.z = stepify(p1.z, Globals.ground_lod_step)
+			p2.x = stepify(p2.x, Globals.ground_lod_step)
+			p2.z = stepify(p2.z, Globals.ground_lod_step)
+			p3.x = stepify(p3.x, Globals.ground_lod_step)
+			p3.z = stepify(p3.z, Globals.ground_lod_step)
+			p4.x = stepify(p4.x, Globals.ground_lod_step)
+			p4.z = stepify(p4.z, Globals.ground_lod_step)
 			
 			gen_verts.append(p1)
 			gen_verts.append(p2)
@@ -199,15 +186,15 @@ func init_genverts():
 			
 			z += s
 #			s *= 2.0
-			s += ground_lod_step * 2.0
+			s += Globals.ground_lod_step * 2.0
 			
 		x += a
 	
 	near_far_limit_i = gen_verts.size()
 	
 	# Square grid
-	var s = ground_lod_step# * 4.0
-	var w = ground_size / 10.0 + s
+	var s = Globals.ground_lod_step# * 4.0
+	var w = Globals.ground_size / 10.0 + s
 	x = -w
 	while(x < w):
 		var z = -w

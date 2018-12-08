@@ -2,28 +2,47 @@ extends TextureRect
 
 export (NodePath) var world
 export (NodePath) var viewpoint
+export (Color) var water_color
+export (Color) var sand_color
+export (Color) var grass_color
+export (Color) var mountain_color
+export (Color) var snow_color
+export var zoom = 30.0
 var noise = preload("res://Scripts/HeightGenerator.gd").new()
 var thread = Thread.new()
-var reso = Vector2(256, 256)
+var reso
 var img = Image.new()
+
+var original_pos
+
+var gen_pos = Vector3(0,0,0)
+var last_gen_pos = Vector3(0,0,0)
 
 func _ready():
 	if(is_visible_in_tree()):
 		world = get_node(world)
 		viewpoint = get_node(viewpoint)
-		noise.init(world)
+		noise.init()
 		reso = rect_size
+		original_pos = rect_position
 		img.create(reso.x, reso.y, false, Image.FORMAT_RGBA8)
 		start_generating()
 
+func _process(delta):
+	if(Input.is_action_just_pressed("ui_focus_next")):
+		get_parent().visible = !get_parent().visible
+	
+	var scroll = last_gen_pos - viewpoint.get_global_transform().origin
+	scroll /= zoom
+	rect_position = original_pos + Vector2(scroll.x, scroll.z)
+
+
 func start_generating():
 	print("Start generating minimap")
-	var pos = viewpoint.get_global_transform().origin
-	pos.y = 0.0
-	thread.start(self, "generate", pos)
+	gen_pos = viewpoint.get_global_transform().origin
+	thread.start(self, "generate", gen_pos)
 
 func generate(pos):
-#	print(noise._noise.seed)
 	
 	# Generate pixels
 	img.lock()
@@ -35,33 +54,43 @@ func generate(pos):
 			var p = Vector3(0,0,0) #pos
 			p.x += x - reso.x/2.0
 			p.z += y - reso.y/2.0
-			p *= 30.0
-			
+			p *= zoom
 			p += pos
 			
-#			p += Vector3(x - reso.x / 2.0, 0.0, y - reso.y / 2.0) * 30.0
-			
-			
-			
-			var h = clamp(noise.get_h(p) / 200.0, 0.0, 1.0)
+			var h = noise.get_h(p)
 			var c = Color(0,0,0,0)
 			
-			if(h <= 0.0):
-				c = Color(0.0, 0.0, 0.0, 0.2)
-			elif(h < 0.5):
-				c = Color(0.5, 0.5, 0.5, 0.9)
-			elif(h < 0.9):
-				c = Color(0.6, 0.6, 0.6, 0.9)
-			else:
-				c = Color(1.0, 1.0, 1.0, 0.9)
+#			if(h <= 0.0):
+#				c = water_color
+#			elif(h < 16.0):
+#				c = sand_color
+#			elif(h < 100.0):
+#				c = grass_color
+#			elif(h < 256.0):
+#				c = mountain_color
+#			else:
+#				c = snow_color
 			
-			c *= h / 2.0 + 0.5
+			c = water_color
+			if(h > -8.0):
+				c = c.linear_interpolate(sand_color, clamp((h + 8.0) / 16.0, 0.0, 1.0))
+			if(h > 16.0):
+				c = c.linear_interpolate(grass_color, clamp((h - 16.0) / 16.0, 0.0, 1.0))
+			if(h > 64.0):
+				c = c.linear_interpolate(mountain_color, clamp((h - 64.0) / 64.0, 0.0, 1.0))
+			if(h > 220.0):
+				c = c.linear_interpolate(snow_color, clamp((h - 220.0) / 64.0, 0.0, 1.0))
+			
+#			h += 200.0
+			h = clamp(h / 300.0, 0.0, 1.0)
+			var hc = Color(h, h, h, c.a)
+			c = c.linear_interpolate(hc, 0.5)
 			
 			img.set_pixel(x, y, c)
 			y += 1
 		x += 1
-	img.flip_x()
-	img.flip_y()
+#	img.flip_x()
+#	img.flip_y()
 	img.unlock()
 	
 	# Create texture and finish
@@ -73,6 +102,6 @@ func generate(pos):
 func finish_generating():
 	var tex = thread.wait_to_finish()
 	texture = tex
-	
+	last_gen_pos = gen_pos
 	print("Minimap generated")
 	call_deferred("start_generating")

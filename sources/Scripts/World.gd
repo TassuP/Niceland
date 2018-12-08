@@ -4,10 +4,10 @@ extends WorldEnvironment
 export (NodePath) var dlabel
 
 # Random generation settings
-export var game_seed = 1
-export var ground_size = 1024.0 * 2.0
-export var ground_lod_step = 8.0
-export var ground_xz_scale = 2.0
+#export var game_seed = 13
+#export var ground_size = 1024.0 * 3.0
+#export var ground_lod_step = 4.0
+#export var ground_xz_scale = 1.5
 
 # Wind settings
 var use_wind = true
@@ -22,12 +22,12 @@ export (NodePath) var sun
 export (NodePath) var clouds
 export (NodePath) var water
 var env
-#var sky
 
 var time_of_day = 48000.0 # 0 -> 86400
 var day_phase = 0.0 # -PI -> PI
 var game_timescale = 600.0
 
+# Sky and light colors
 export var day_color_sun = Color(1,1,1,1)
 export var day_color_sky = Color(0.388235,0.490196,0.890196,1)
 export var day_color_horizon = Color(0.817383,0.883606,0.96875,1)
@@ -40,7 +40,6 @@ export var night_color_horizon = Color(0.047059,0.054902,0.164706,1)
 export var dawn_color_sun = Color(1,0.678431,0,1)
 export var dawn_color_sky = Color(0,0.082353,0.215686,1)
 export var dawn_color_horizon = Color(0.545098,0.188235,0.105882,1)
-
 var sun_c = day_color_sun
 var sky_c = day_color_sky
 var hor_c = day_color_horizon
@@ -77,9 +76,8 @@ func _ready():
 		n.material_override.set_shader_param("texture_wind", wind_tex)
 	
 	randomize()
-	game_seed = randi()
 	environment.set_dof_blur_far_distance(64.0)
-	environment.set_dof_blur_far_transition(ground_size * 0.5)
+	environment.set_dof_blur_far_transition(Globals.ground_size * 0.5)
 	
 	
 

@@ -7,7 +7,7 @@ var use_only_lod = false # TODO
 func _ready():
 	print("Printing variable just to get rid of warning in ", name, ": ", use_only_lod)
 	world = get_parent()
-	var s = world.ground_size / 1024.0
+	var s = Globals.ground_size / 1024.0
 	$Lod.scale = Vector3(s, 1.0, s) * 2.0
 	show()
 

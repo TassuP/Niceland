@@ -21,11 +21,6 @@ export var random_scale = 0.3
 export var index = 0
 var pool_size = 0
 
-# If the world node is found, then the following variables
-# will be copied from there.
-var ground_size = 1024 * 2
-var ground_lod_step = 4.0
-
 # These are calculated from ground_size
 var view_distance
 var upd_distance
@@ -52,22 +47,12 @@ func _ready():
 	set_process(false)
 	if(is_visible_in_tree() == false):
 		return
-	
-	if(world != null):
-		if(verbose):
-			print("Copying ground object settings from World")
-		world = get_node(world)
-		ground_size = world.ground_size
-		ground_lod_step = world.ground_lod_step
-	else:
-		if(verbose):
-			print("Using default settings for ground objects")
-	
-	noise.init(world)
+
+	noise.init()
 	
 #	view_distance = float(ground_size) / 64.0
 #	upd_distance = float(view_distance) / 8.0
-	view_distance = float(ground_size)
+	view_distance = float(Globals.ground_size)
 	upd_distance = float(view_distance)
 	view_distance *= far_distance
 	upd_distance *= far_distance / 4.0

@@ -10,8 +10,8 @@ var noise = preload("res://Scripts/HeightGenerator.gd").new()
 func _ready():
 	target_trans.transform = transform
 	world = get_parent()
-	noise.init(world)
-	get_viewport().get_camera().far = world.ground_size
+	noise.init()
+	get_viewport().get_camera().far = Globals.ground_size
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	$"Map symbol".show()
 
@@ -25,8 +25,6 @@ func _physics_process(delta):
 	else:
 		target_trans.transform.origin.y = h + 3
 	
-	if(target_trans.transform.origin.y <= h + 1):
-		target_trans.transform.origin.y = h + 1
 		
 	# WASD
 	if(Input.is_key_pressed(KEY_W)):
@@ -40,6 +38,10 @@ func _physics_process(delta):
 	
 	# Smooth apply
 	transform = transform.interpolate_with(target_trans.transform, clamp(delta * 2.0, 0.0, 1.0))
+	
+	# Keep above ground
+	if(transform.origin.y < h + 3):
+		transform.origin.y = h + 3
 	
 	# Teleport
 	if(Input.is_key_pressed(KEY_T)):
