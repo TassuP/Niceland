@@ -3,22 +3,23 @@ extends Node
 var _noise
 
 func init():
-	_noise = make_noise(Globals.game_seed, Globals.ground_xz_scale)
+	_noise = make_noise()
 
-func make_noise(_seed = 0, stretch = 2.0):
+func make_noise():
 	_noise = OpenSimplexNoise.new()
 	_noise.seed = Globals.game_seed
 	_noise.octaves = 6
 	_noise.period = 1024 * Globals.ground_xz_scale
 	_noise.persistence = 0.4
 	_noise.lacunarity = 2.5
-#	_noise.persistence = 0.3
-#	_noise.lacunarity = 4.0
 	return _noise
+
+func get_n(pos):
+	return _noise.get_noise_2d(pos.x, pos.z)
 
 func get_h(pos):
 	pos.y = _noise.get_noise_2d(pos.x, pos.z)
-	pos.y *= 0.2 + pos.y * pos.y
+	pos.y *= 0.1 + pos.y * pos.y
 	pos.y *= 1024.0
 	pos.y += 32.0
 	if(pos.y <= 0.2):
