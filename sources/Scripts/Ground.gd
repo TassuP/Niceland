@@ -71,20 +71,19 @@ func finish_generating():
 		msh = generate([view_point, noise])
 	self.set_mesh(msh)
 	
-	# TODO: Collider generation. I think Godot has a bug...
 	
-#	$StaticBody/CollisionShape.set_shape(msh.create_trimesh_shape())
+	$StaticBody/CollisionShape.set_shape(msh.create_trimesh_shape())
 #	print("surf count ",msh.get_surface_count())
 #	print("face count ",msh.get_faces().size())
 	
 	# Generate collider
 #	var shp = ConcavePolygonShape.new()
 #	shp.set_faces(msh.get_faces())
-#	col_shape.set_shape(shp)
-#	col_shape.set_disabled(false)
+#	$StaticBody/CollisionShape.set_shape(shp)
+#	$StaticBody/CollisionShape.set_disabled(false)
 	
 	# Generate collider
-#	col_shape.set_faces(msh.get_faces())
+#	$Collider/CollisionShape.set_faces(msh.get_faces())
 #	$Collider/CollisionShape.set_shape(col_shape)
 #	$Collider/CollisionShape.set_disabled(false)
 	
@@ -128,6 +127,11 @@ func generate(userdata):
 	# SurfaceTool to Mesh
 	var msh = Mesh.new()
 	msh = surf.commit()
+
+#	var shp = ConcavePolygonShape.new()
+#	shp.set_faces(msh.get_faces())
+#	$StaticBody/CollisionShape.set_shape(shp)
+#	$StaticBody/CollisionShape.set_disabled(false)
 	
 	if(use_threading):
 		call_deferred("finish_generating")
