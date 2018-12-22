@@ -35,6 +35,11 @@ func _physics_process(delta):
 		target_trans.translate(Vector3(-1.0, 0.0, 0.0) * spd)
 	if(Input.is_key_pressed(KEY_D)):
 		target_trans.translate(Vector3(1.0, 0.0, 0.0) * spd)
+		
+	if(Input.is_action_just_released("ui_scroll_up")):
+		target_trans.translate(Vector3(0.0, 10.0, 0.0) * spd)
+	if(Input.is_action_just_released("ui_scroll_down")):
+		target_trans.translate(Vector3(0.0, -10.0, 0.0) * spd)
 	
 	# Smooth apply
 	transform = transform.interpolate_with(target_trans.transform, clamp(delta * 2.0, 0.0, 1.0))
