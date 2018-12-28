@@ -9,6 +9,7 @@ var vol3 = mute
 var vol4 = mute
 
 var current_state = 0
+var switch_timer = 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,6 +19,13 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	
+	switch_timer -= delta
+	if(switch_timer <= 0.0):
+		switch_timer = 10.0 + randf() * 10.0
+		current_state = randi() % 5
+		print("Change music state to ", current_state)
+	
 	
 	if(Input.is_key_pressed(KEY_1)):
 		current_state = 0
