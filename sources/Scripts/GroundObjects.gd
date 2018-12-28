@@ -1,16 +1,15 @@
 extends MultiMeshInstance
 
-# World node is optional
-export (NodePath) var world
-
 # Main settings
 export var verbose = false
+export var random_seed = 0
 export var far_distance = 0.1
 export var far_fade = false
-export var spacing = 3.0
-export var treshold = 0.6
-export var area_treshold = 0.7
-export var area_size = 1.0
+export var spacing = 10.0
+export var area_1_treshold = 0.3
+export var area_2_treshold = 0.3
+export var area_2_size_multiplier = 10.0
+export var area_affects_treshold = true
 export var slope_min = 0.0
 export var slope_max = 0.2
 export var align_with_ground = true
@@ -18,7 +17,7 @@ export var altitude_min = 8.0
 export var altitude_max = 1024.0
 export var base_scale = 1.0
 export var random_scale = 0.3
-export var index = 0
+export var area_affects_scale = true
 var pool_size = 0
 
 # These are calculated from ground_size
@@ -47,7 +46,7 @@ func _ready():
 	set_process(false)
 	if(is_visible_in_tree() == false):
 		return
-
+	
 	noise.init()
 	
 #	view_distance = float(ground_size) / 64.0
@@ -84,7 +83,7 @@ func _ready():
 	
 	
 	
-	index = float(index) * 123.456
+	random_seed = float(random_seed) * 1234.56
 	
 	view_point = get_vp()
 	last_point = view_point
@@ -202,7 +201,9 @@ func finish_generating():
 		print(name," x ", arr.size()," in ", gen_time / 1000.0, " s")
 	transform.origin = view_point
 	last_point = view_point
-	set_process(true)
+	
+	if(Globals.generate_just_once == false):
+		set_process(true)
 
 func generate(userdata):
 	
@@ -221,15 +222,18 @@ func generate(userdata):
 			var xx = x + pos.x
 			var zz = z + pos.z
 			
-			var r = noise._noise.get_noise_2d(xx * 123.0 / area_size, zz * 123.0 / area_size) / 2.0 + 0.5
-#			var tres_noise = 0.5 +  r
+			var r = noise._noise.get_noise_2d((xx+random_seed) * 123.0 / area_2_size_multiplier, zz * 123.0 / area_2_size_multiplier + random_seed)
 			
-			if(r >= area_treshold):
+			if(r >= area_2_treshold):
 				var rp = Vector3(r, 0.0, 0.0)
+				var a2_aff = clamp(((r - area_2_treshold) / (1.0 - area_2_treshold)) * 3.0, 0.0, 1.0)
 				
-				r = noise._noise.get_noise_2d(xx * 1234.0, zz * 1234.0) / 2.0 + 0.5
-				if(r >= treshold):
-					
+				r = noise._noise.get_noise_2d(xx * 1234.0, zz * 1234.0)
+				
+				if(area_affects_treshold):
+					r *= 0.5 + a2_aff
+				
+				if(r >= area_1_treshold):
 					# Randomize position
 					rp.z = r
 					rp *= 1000.0
@@ -269,7 +273,8 @@ func generate(userdata):
 								quat.set_euler(Vector3(xa, 0.0, za))
 								quat = Quat(Basis(quat).y, ya)
 								tr.basis = Basis(quat);
-							
+							if(area_affects_scale):
+								s *=  0.5 + a2_aff
 							tr.basis = tr.basis.scaled(Vector3(s, s, s))
 							tr.origin = p;
 							
