@@ -48,8 +48,8 @@ void fragment() {
 	vec2 uv = normal.xz / (1.5+abs(normal.y) * 10.0);
 	vec2 uv_stars = normal.xz / (1.5+abs(normal.y) * 2.0);
 	vec2 uv2 = uv / 2.0;
-	uv += wind_uv_offset / 20.0;
-	uv2 += wind_uv_offset / 150.0;
+	uv += wind_uv_offset / 80.0;
+	uv2 += wind_uv_offset / 600.0;
 	uv_stars += vec2(-TIME, 0.0) / 180.0;
 	
 	vec4 stars_tex = textureLod(texture_stars, uv_stars * 2.0, 0.0);
