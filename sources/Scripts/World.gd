@@ -25,7 +25,7 @@ var env
 
 var time_of_day = 48000.0 # 0 -> 86400
 var day_phase = 0.0 # -PI -> PI
-var game_timescale = 600.0
+var game_timescale = 60.0 # 1.0 = realtime
 
 # Sky and light colors
 export var day_color_sun = Color(1,1,1,1)
@@ -52,7 +52,6 @@ func _ready():
 	clouds = get_node(clouds)
 	water = get_node(water)
 	env = get_environment()
-#	sky = env.get_sky()
 	
 	print("\nexport var day_color_sun = Color(",day_color_sun,")")
 	print("export var day_color_sky = Color(",day_color_sky,")")
@@ -178,12 +177,6 @@ func upd_sun():
 		sun_c = sun_c.linear_interpolate(sunset_color_sun, p_twilight)
 		sky_c = sky_c.linear_interpolate(sunset_color_sky, p_twilight)
 		hor_c = hor_c.linear_interpolate(sunset_color_horizon, p_twilight)
-#
-#	sky.set_sky_top_color(sky_c)
-#	sky.set_sky_horizon_color(hor_c)
-#	sky.set_ground_horizon_color(hor_c)
-#	sky.set_ground_bottom_color(hor_c)
-#	sky.set_sun_color(hor_c)
 	
 	var amb = (sky_c + hor_c) / 4.0
 	amb = amb.linear_interpolate(Color(0.1, 0.1, 0.1), 0.2)
