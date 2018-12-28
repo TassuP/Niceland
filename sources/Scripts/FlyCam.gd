@@ -13,7 +13,6 @@ func _ready():
 	noise.init()
 	get_viewport().get_camera().far = Globals.ground_size
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	$"Map symbol".show()
 
 func _physics_process(delta):
 	
@@ -49,7 +48,7 @@ func _physics_process(delta):
 		transform.origin.y = h + 3
 	
 	# Teleport
-	if(Input.is_key_pressed(KEY_T)):
+	if(Input.is_action_just_pressed("ui_home")):
 		var r = target_trans.transform.origin
 		r.x = (randf() - randf()) * 100000.0
 		r.z = (randf() - randf()) * 100000.0
