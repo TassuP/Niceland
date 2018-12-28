@@ -38,7 +38,7 @@ func _process(delta):
 
 
 func start_generating():
-	print("Start generating minimap")
+#	print("Start generating minimap")
 	gen_pos = viewpoint.get_global_transform().origin
 	thread.start(self, "generate", gen_pos)
 
@@ -79,7 +79,7 @@ func generate(pos):
 			if(h > 64.0):
 				c = c.linear_interpolate(mountain_color, clamp((h - 64.0) / 64.0, 0.0, 1.0))
 			if(h > 220.0):
-				c = c.linear_interpolate(snow_color, clamp((h - 220.0) / 64.0, 0.0, 1.0))
+				c = c.linear_interpolate(snow_color, clamp((h - 220.0) / 500.0, 0.0, 1.0))
 			
 #			h += 200.0
 			h = clamp(h / 300.0, 0.0, 1.0)
@@ -103,5 +103,7 @@ func finish_generating():
 	var tex = thread.wait_to_finish()
 	texture = tex
 	last_gen_pos = gen_pos
-	print("Minimap generated")
-	call_deferred("start_generating")
+#	print("Minimap generated")
+	
+	if(Globals.generate_just_once == false):
+		call_deferred("start_generating")
