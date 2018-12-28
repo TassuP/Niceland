@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=2]
+[gd_scene load_steps=78 format=2]
 
 [ext_resource path="res://default_env.tres" type="Environment" id=1]
 [ext_resource path="res://Scripts/World.gd" type="Script" id=2]
@@ -27,13 +27,12 @@
 [ext_resource path="res://Scripts/Minimap.gd" type="Script" id=25]
 [ext_resource path="res://Scripts/MapSymbol.gd" type="Script" id=26]
 [ext_resource path="res://Shaders/PostProcessing.shader" type="Shader" id=27]
-[ext_resource path="res://Textures/curve.png" type="Texture" id=28]
-[ext_resource path="res://Scripts/Music.gd" type="Script" id=29]
-[ext_resource path="res://Music/drums.ogg" type="AudioStream" id=30]
-[ext_resource path="res://Music/basso.ogg" type="AudioStream" id=31]
-[ext_resource path="res://Music/cheesepom.ogg" type="AudioStream" id=32]
-[ext_resource path="res://Music/pad.ogg" type="AudioStream" id=33]
-[ext_resource path="res://Scripts/Screenshot.gd" type="Script" id=34]
+[ext_resource path="res://Scripts/Music.gd" type="Script" id=28]
+[ext_resource path="res://Music/drums.ogg" type="AudioStream" id=29]
+[ext_resource path="res://Music/basso.ogg" type="AudioStream" id=30]
+[ext_resource path="res://Music/cheesepom.ogg" type="AudioStream" id=31]
+[ext_resource path="res://Music/pad.ogg" type="AudioStream" id=32]
+[ext_resource path="res://Scripts/Screenshot.gd" type="Script" id=33]
 
 [sub_resource type="OpenSimplexNoise" id=1]
 
@@ -386,10 +385,6 @@ albedo_color = Color( 1, 1, 1, 0.631373 )
 [sub_resource type="ShaderMaterial" id=45]
 
 shader = ExtResource( 27 )
-shader_param/curves_on = true
-shader_param/curve_s_on = false
-shader_param/curve_mix = 1.0
-shader_param/curvetex = ExtResource( 28 )
 
 [node name="Game" type="Node"]
 
@@ -754,34 +749,34 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Music" type="Node" parent="."]
-script = ExtResource( 29 )
+script = ExtResource( 28 )
 
 [node name="Drums" type="AudioStreamPlayer" parent="Music"]
-stream = ExtResource( 30 )
+stream = ExtResource( 29 )
 volume_db = -80.0
 autoplay = true
 bus = "Drums"
 
 [node name="Bass" type="AudioStreamPlayer" parent="Music"]
-stream = ExtResource( 31 )
+stream = ExtResource( 30 )
 volume_db = -80.0
 autoplay = true
 bus = "Bass"
 
 [node name="Cheese" type="AudioStreamPlayer" parent="Music"]
-stream = ExtResource( 32 )
+stream = ExtResource( 31 )
 volume_db = -80.0
 autoplay = true
 bus = "Cheese"
 
 [node name="Pad" type="AudioStreamPlayer" parent="Music"]
-stream = ExtResource( 33 )
+stream = ExtResource( 32 )
 volume_db = -80.0
 autoplay = true
 bus = "Pad"
 
 [node name="Screenshot" type="Node" parent="."]
-script = ExtResource( 34 )
+script = ExtResource( 33 )
 shortcut_action = "ui_accept"
 file_prefix = "nice_shot"
 output_path = "res://Screenshots"
