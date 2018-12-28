@@ -1,36 +1,39 @@
-[gd_scene load_steps=80 format=2]
+[gd_scene load_steps=79 format=2]
 
 [ext_resource path="res://default_env.tres" type="Environment" id=1]
 [ext_resource path="res://Scripts/World.gd" type="Script" id=2]
-[ext_resource path="res://Scripts/MapCam.gd" type="Script" id=3]
-[ext_resource path="res://Materials/Clouds.material" type="Material" id=4]
-[ext_resource path="res://Scripts/Clouds.gd" type="Script" id=5]
-[ext_resource path="res://Materials/Ground.material" type="Material" id=6]
-[ext_resource path="res://Scripts/Ground.gd" type="Script" id=7]
-[ext_resource path="res://Shaders/Water.shader" type="Shader" id=8]
-[ext_resource path="res://Scripts/Water.gd" type="Script" id=9]
-[ext_resource path="res://Materials/Water_far.material" type="Material" id=10]
-[ext_resource path="res://Materials/Spruce.material" type="Material" id=11]
-[ext_resource path="res://Meshes/Spruce.obj" type="ArrayMesh" id=12]
-[ext_resource path="res://Scripts/GroundObjects.gd" type="Script" id=13]
-[ext_resource path="res://Meshes/Spruce lod.obj" type="ArrayMesh" id=14]
-[ext_resource path="res://Meshes/Tree 2.obj" type="ArrayMesh" id=15]
-[ext_resource path="res://Meshes/Tree 2 leaves.obj" type="ArrayMesh" id=16]
-[ext_resource path="res://Meshes/Grass.obj" type="ArrayMesh" id=17]
-[ext_resource path="res://Meshes/Rock.obj" type="ArrayMesh" id=18]
-[ext_resource path="res://Meshes/Rock lod.obj" type="ArrayMesh" id=19]
-[ext_resource path="res://Meshes/Plant 1.obj" type="ArrayMesh" id=20]
-[ext_resource path="res://Meshes/Plant 2.obj" type="ArrayMesh" id=21]
-[ext_resource path="res://Meshes/Shroom.obj" type="ArrayMesh" id=22]
-[ext_resource path="res://Scripts/FlyCam.gd" type="Script" id=23]
-[ext_resource path="res://Scripts/Minimap.gd" type="Script" id=24]
-[ext_resource path="res://Scripts/MapSymbol.gd" type="Script" id=25]
-[ext_resource path="res://Scripts/Music.gd" type="Script" id=26]
-[ext_resource path="res://Music/drums.ogg" type="AudioStream" id=27]
-[ext_resource path="res://Music/basso.ogg" type="AudioStream" id=28]
-[ext_resource path="res://Music/cheesepom.ogg" type="AudioStream" id=29]
-[ext_resource path="res://Music/pad.ogg" type="AudioStream" id=30]
-[ext_resource path="res://Scripts/Screenshot.gd" type="Script" id=31]
+[ext_resource path="res://Materials/Clouds.material" type="Material" id=3]
+[ext_resource path="res://Scripts/Clouds.gd" type="Script" id=4]
+[ext_resource path="res://Materials/Ground.material" type="Material" id=5]
+[ext_resource path="res://Scripts/Ground.gd" type="Script" id=6]
+[ext_resource path="res://Shaders/Water.shader" type="Shader" id=7]
+[ext_resource path="res://Scripts/Water.gd" type="Script" id=8]
+[ext_resource path="res://Materials/Water_far.material" type="Material" id=9]
+[ext_resource path="res://Materials/Spruce.material" type="Material" id=10]
+[ext_resource path="res://Meshes/Spruce.obj" type="ArrayMesh" id=11]
+[ext_resource path="res://Scripts/GroundObjects.gd" type="Script" id=12]
+[ext_resource path="res://Meshes/Spruce lod.obj" type="ArrayMesh" id=13]
+[ext_resource path="res://Meshes/Tree 2.obj" type="ArrayMesh" id=14]
+[ext_resource path="res://Meshes/Tree 2 leaves.obj" type="ArrayMesh" id=15]
+[ext_resource path="res://Meshes/Grass.obj" type="ArrayMesh" id=16]
+[ext_resource path="res://Meshes/Rock.obj" type="ArrayMesh" id=17]
+[ext_resource path="res://Meshes/Rock lod.obj" type="ArrayMesh" id=18]
+[ext_resource path="res://Meshes/Plant 1.obj" type="ArrayMesh" id=19]
+[ext_resource path="res://Meshes/Plant 2.obj" type="ArrayMesh" id=20]
+[ext_resource path="res://Meshes/Shroom.obj" type="ArrayMesh" id=21]
+[ext_resource path="res://Scripts/FlyCam.gd" type="Script" id=22]
+[ext_resource path="res://Scripts/SpawnBox.gd" type="Script" id=23]
+[ext_resource path="res://Scripts/Box.gd" type="Script" id=24]
+[ext_resource path="res://Scripts/Minimap.gd" type="Script" id=25]
+[ext_resource path="res://Scripts/MapSymbol.gd" type="Script" id=26]
+[ext_resource path="res://Shaders/PostProcessing.shader" type="Shader" id=27]
+[ext_resource path="res://Textures/curve.png" type="Texture" id=28]
+[ext_resource path="res://Scripts/Music.gd" type="Script" id=29]
+[ext_resource path="res://Music/drums.ogg" type="AudioStream" id=30]
+[ext_resource path="res://Music/basso.ogg" type="AudioStream" id=31]
+[ext_resource path="res://Music/cheesepom.ogg" type="AudioStream" id=32]
+[ext_resource path="res://Music/pad.ogg" type="AudioStream" id=33]
+[ext_resource path="res://Scripts/Screenshot.gd" type="Script" id=34]
 
 [sub_resource type="OpenSimplexNoise" id=1]
 
@@ -49,59 +52,73 @@ noise = SubResource( 1 )
 ambient_light_color = Color( 0.501961, 0.501961, 0.501961, 1 )
 ambient_light_sky_contribution = 0.0
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="GDScript" id=4]
+
+script/source = "extends Camera
+
+export (NodePath) var target
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	target = get_node(target)
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	transform.origin.x = target.transform.origin.x
+	transform.origin.z = target.transform.origin.z
+	
+"
+
+[sub_resource type="SpatialMaterial" id=5]
 
 albedo_color = Color( 0.501961, 0.533333, 1, 1 )
 
-[sub_resource type="PlaneMesh" id=5]
+[sub_resource type="PlaneMesh" id=6]
 
 size = Vector2( 3200, 3200 )
 subdivide_width = 16
 subdivide_depth = 16
 
-[sub_resource type="QuadMesh" id=6]
+[sub_resource type="QuadMesh" id=7]
 
 
-[sub_resource type="ConcavePolygonShape" id=7]
-
-
-[sub_resource type="OpenSimplexNoise" id=8]
+[sub_resource type="OpenSimplexNoise" id=9]
 
 octaves = 1
 period = 16.0
 lacunarity = 3.0
 
-[sub_resource type="NoiseTexture" id=9]
+[sub_resource type="NoiseTexture" id=10]
 
 width = 256
 height = 256
 seamless = true
-noise = SubResource( 8 )
+noise = SubResource( 9 )
 
-[sub_resource type="ShaderMaterial" id=10]
+[sub_resource type="ShaderMaterial" id=11]
 
-shader = ExtResource( 8 )
+shader = ExtResource( 7 )
 shader_param/water_color = Color( 0.584314, 0.686275, 0.858824, 1 )
 shader_param/foam_color = Color( 0.815686, 0.890196, 0.968627, 1 )
 shader_param/wind_uv_offset = Vector2( 0, 0 )
 shader_param/wind_dir = Vector2( 1, 0 )
 shader_param/wind_speed = 0.1
-shader_param/texture_waves = SubResource( 9 )
+shader_param/texture_waves = SubResource( 10 )
 
-[sub_resource type="PlaneMesh" id=11]
+[sub_resource type="PlaneMesh" id=12]
 
 size = Vector2( 512, 512 )
 subdivide_width = 256
 subdivide_depth = 256
 
-[sub_resource type="MultiMesh" id=12]
+[sub_resource type="MultiMesh" id=13]
 
 transform_format = 1
 instance_count = 1
-mesh = ExtResource( 12 )
+mesh = ExtResource( 11 )
 transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[sub_resource type="SpatialMaterial" id=13]
+[sub_resource type="SpatialMaterial" id=14]
 
 flags_vertex_lighting = true
 params_diffuse_mode = 1
@@ -111,32 +128,25 @@ params_billboard_mode = 2
 params_billboard_keep_scale = true
 albedo_color = Color( 0.109804, 0.298039, 0.156863, 1 )
 
-[sub_resource type="MultiMesh" id=14]
+[sub_resource type="MultiMesh" id=15]
 
 transform_format = 1
-mesh = ExtResource( 14 )
+mesh = ExtResource( 13 )
 
-[sub_resource type="SpatialMaterial" id=15]
+[sub_resource type="SpatialMaterial" id=16]
 
 albedo_color = Color( 0.494118, 0.4, 0.270588, 1 )
 
-[sub_resource type="MultiMesh" id=16]
+[sub_resource type="MultiMesh" id=17]
 
 transform_format = 1
 instance_count = 1
-mesh = ExtResource( 15 )
+mesh = ExtResource( 14 )
 transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[sub_resource type="SpatialMaterial" id=17]
+[sub_resource type="SpatialMaterial" id=18]
 
 albedo_color = Color( 0.184314, 0.466667, 0.254902, 1 )
-
-[sub_resource type="MultiMesh" id=18]
-
-transform_format = 1
-instance_count = 1
-mesh = ExtResource( 16 )
-transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [sub_resource type="MultiMesh" id=19]
 
@@ -145,17 +155,11 @@ instance_count = 1
 mesh = ExtResource( 15 )
 transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[sub_resource type="MultiMesh" id=20]
-
-transform_format = 1
-instance_count = 1
-mesh = ExtResource( 16 )
-transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-
-[sub_resource type="Shader" id=21]
+[sub_resource type="Shader" id=20]
 
 code = "shader_type spatial;
 render_mode blend_mix,depth_draw_always,cull_disabled,diffuse_burley,specular_disabled,vertex_lighting;
+
 
 uniform sampler2D texture_wind;
 uniform vec2 wind_uv_offset = vec2(0.0, 0.0);
@@ -164,6 +168,7 @@ uniform float wind_speed = 0.1;
 uniform float wind_bend = 2.0;
 uniform float wind_scale = 0.02;
 
+uniform sampler2D texture_albedo : hint_albedo;
 uniform vec4 albedo : hint_color;
 uniform vec4 ground_color : hint_color;
 
@@ -183,13 +188,14 @@ void vertex() {
 }
 
 void fragment() {
-	ALBEDO = col.rgb;
+	vec4 albedo_tex = texture(texture_albedo,UV);
+	ALBEDO = col.rgb * albedo_tex.rgb;
 }
 "
 
-[sub_resource type="ShaderMaterial" id=22]
+[sub_resource type="ShaderMaterial" id=21]
 
-shader = SubResource( 21 )
+shader = SubResource( 20 )
 shader_param/wind_uv_offset = Vector2( 0, 0 )
 shader_param/wind_dir = Vector2( 0, 0 )
 shader_param/wind_speed = 0.1
@@ -198,14 +204,14 @@ shader_param/wind_scale = 0.04
 shader_param/albedo = Color( 0.666667, 0.584314, 0.368627, 1 )
 shader_param/ground_color = Color( 0.6, 0.521569, 0.329412, 1 )
 
-[sub_resource type="MultiMesh" id=23]
+[sub_resource type="MultiMesh" id=22]
 
 transform_format = 1
 instance_count = 1
-mesh = ExtResource( 17 )
+mesh = ExtResource( 16 )
 transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[sub_resource type="Shader" id=24]
+[sub_resource type="Shader" id=23]
 
 code = "shader_type spatial;
 render_mode blend_mix,depth_draw_always,cull_disabled,diffuse_burley,specular_disabled,vertex_lighting;
@@ -227,18 +233,22 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=25]
+[sub_resource type="ShaderMaterial" id=24]
 
-shader = SubResource( 24 )
+shader = SubResource( 23 )
 shader_param/albedo = Color( 0.713726, 0.623529, 0.396078, 1 )
 shader_param/ground_color = Color( 0.6, 0.521569, 0.329412, 1 )
 shader_param/fade_start = 16.0
 shader_param/fade_end = 32.0
 
-[sub_resource type="MultiMesh" id=26]
+[sub_resource type="MultiMesh" id=25]
 
 transform_format = 1
-mesh = ExtResource( 17 )
+mesh = ExtResource( 16 )
+
+[sub_resource type="SpatialMaterial" id=26]
+
+albedo_color = Color( 0.545098, 0.537255, 0.603922, 1 )
 
 [sub_resource type="MultiMesh" id=27]
 
@@ -247,38 +257,22 @@ instance_count = 1
 mesh = ExtResource( 17 )
 transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[sub_resource type="MultiMesh" id=28]
+[sub_resource type="ShaderMaterial" id=28]
 
-transform_format = 1
-mesh = ExtResource( 17 )
-
-[sub_resource type="SpatialMaterial" id=29]
-
-albedo_color = Color( 0.545098, 0.537255, 0.603922, 1 )
-
-[sub_resource type="MultiMesh" id=30]
-
-transform_format = 1
-instance_count = 1
-mesh = ExtResource( 18 )
-transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-
-[sub_resource type="ShaderMaterial" id=31]
-
-shader = SubResource( 24 )
+shader = SubResource( 23 )
 shader_param/albedo = Color( 0.545098, 0.537255, 0.603922, 1 )
 shader_param/ground_color = Color( 0.545098, 0.537255, 0.603922, 1 )
 shader_param/fade_start = 16.0
 shader_param/fade_end = 32.0
 
-[sub_resource type="MultiMesh" id=32]
+[sub_resource type="MultiMesh" id=29]
 
 transform_format = 1
-mesh = ExtResource( 19 )
+mesh = ExtResource( 18 )
 
-[sub_resource type="ShaderMaterial" id=33]
+[sub_resource type="ShaderMaterial" id=30]
 
-shader = SubResource( 21 )
+shader = SubResource( 20 )
 shader_param/wind_uv_offset = Vector2( 0, 0 )
 shader_param/wind_dir = Vector2( 0, 0 )
 shader_param/wind_speed = 0.1
@@ -287,16 +281,16 @@ shader_param/wind_scale = 0.07
 shader_param/albedo = Color( 0.419608, 0.733333, 0.415686, 1 )
 shader_param/ground_color = Color( 0.254902, 0.529412, 0.254902, 1 )
 
-[sub_resource type="MultiMesh" id=34]
+[sub_resource type="MultiMesh" id=31]
 
 transform_format = 1
 instance_count = 1
-mesh = ExtResource( 20 )
+mesh = ExtResource( 19 )
 transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[sub_resource type="ShaderMaterial" id=35]
+[sub_resource type="ShaderMaterial" id=32]
 
-shader = SubResource( 21 )
+shader = SubResource( 20 )
 shader_param/wind_uv_offset = Vector2( 0, 0 )
 shader_param/wind_dir = Vector2( 0, 0 )
 shader_param/wind_speed = 0.1
@@ -305,38 +299,38 @@ shader_param/wind_scale = 0.02
 shader_param/albedo = Color( 0.490196, 0.262745, 0.184314, 1 )
 shader_param/ground_color = Color( 0.415686, 0.247059, 0.12549, 1 )
 
-[sub_resource type="MultiMesh" id=36]
+[sub_resource type="MultiMesh" id=33]
 
 transform_format = 1
 instance_count = 1
-mesh = ExtResource( 21 )
+mesh = ExtResource( 20 )
 transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[sub_resource type="ShaderMaterial" id=37]
+[sub_resource type="ShaderMaterial" id=34]
 
-shader = SubResource( 24 )
+shader = SubResource( 23 )
 shader_param/albedo = Color( 0.490196, 0.262745, 0.184314, 1 )
 shader_param/ground_color = Color( 0.415686, 0.247059, 0.12549, 1 )
 shader_param/fade_start = 16.0
 shader_param/fade_end = 32.0
 
-[sub_resource type="MultiMesh" id=38]
+[sub_resource type="MultiMesh" id=35]
 
 transform_format = 1
-mesh = ExtResource( 21 )
+mesh = ExtResource( 20 )
 
-[sub_resource type="SpatialMaterial" id=39]
+[sub_resource type="SpatialMaterial" id=36]
 
 albedo_color = Color( 0.560784, 0.388235, 0.223529, 1 )
 
-[sub_resource type="MultiMesh" id=40]
+[sub_resource type="MultiMesh" id=37]
 
 transform_format = 1
 instance_count = 1
-mesh = ExtResource( 22 )
+mesh = ExtResource( 21 )
 transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
-[sub_resource type="Shader" id=41]
+[sub_resource type="Shader" id=38]
 
 code = "shader_type spatial;
 render_mode blend_mix,depth_draw_always,cull_disabled,diffuse_burley,specular_disabled,vertex_lighting;
@@ -358,130 +352,51 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=42]
+[sub_resource type="ShaderMaterial" id=39]
 
-shader = SubResource( 41 )
+shader = SubResource( 38 )
 shader_param/albedo = Color( 0.560784, 0.388235, 0.223529, 1 )
 shader_param/ground_color = Color( 0.560784, 0.388235, 0.223529, 1 )
 shader_param/fade_start = 16.0
 shader_param/fade_end = 32.0
 
-[sub_resource type="MultiMesh" id=43]
+[sub_resource type="MultiMesh" id=40]
 
 transform_format = 1
-mesh = ExtResource( 22 )
+mesh = ExtResource( 21 )
+
+[sub_resource type="PhysicsMaterial" id=41]
+
+friction = 10.0
+rough = true
+
+[sub_resource type="BoxShape" id=42]
+
+
+[sub_resource type="SpatialMaterial" id=43]
+
+flags_vertex_lighting = true
 
 [sub_resource type="SpatialMaterial" id=44]
 
-flags_unshaded = true
+flags_transparent = true
 flags_vertex_lighting = true
-flags_no_depth_test = true
-params_specular_mode = 4
-params_depth_draw_mode = 1
+albedo_color = Color( 1, 1, 1, 0.631373 )
 
-[sub_resource type="PrismMesh" id=45]
+[sub_resource type="ShaderMaterial" id=45]
 
-
-[sub_resource type="ViewportTexture" id=46]
-
-viewport_path = NodePath("WorldEnvironment/Map viewport")
-
-[sub_resource type="Shader" id=47]
-
-code = "shader_type canvas_item;
-
-uniform float brightness = 1.0;
-uniform float contrast = 1.0;
-uniform float saturation = 1.0;
-
-vec3 rgb2hsv(vec3 c)
-{
-    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
-    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
-    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
-
-    float d = q.x - min(q.w, q.y);
-    float e = 1.0e-10;
-    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
-}
-
-vec3 hsv2rgb(vec3 c)
-{
-    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-}
-
-void fragment() {
-	
-	vec3 c = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0).rgb;
-	float lum = (c.r * 0.2126) + (c.g * 0.7152) + (c.b * 0.0722);
-	
-//	vec3 blur = textureLod(SCREEN_TEXTURE, SCREEN_UV, 3.0).rgb;
-//	blur += textureLod(SCREEN_TEXTURE, SCREEN_UV, 2.0).rgb;
-//	blur /= 2.0;
-//	float blum = (blur.r * 0.2126) + (blur.g * 0.7152) + (blur.b * 0.0722);
-//	c = mix(c, blur, pow(1.0 - blum, 2.0));
-	
-	// Sharpen
-	vec3 e = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0).rgb - textureLod(SCREEN_TEXTURE, SCREEN_UV, 3.0).rgb;
-//	e.r = abs(e.r);
-//	e.g = abs(e.g);
-//	e.b = abs(e.b);
-	c.r = max(c.r, mix(c, c - e, 0.4).r);
-	c.g = max(c.g, mix(c, c - e, 0.4).g);
-	c.b = max(c.b, mix(c, c - e, 0.4).b);
-	
-	// Sepia hue
-	float fr = (c.r * 0.393) + (c.g * 0.769) + (c.b * 0.189);
-	float fg = (c.r * 0.349) + (c.g * 0.686) + (c.b * 0.168);
-	float fb = (c.r * 0.272) + (c.g * 0.534) + (c.b * 0.131);
-	c.rgb = mix(c.rgb, vec3(fr, fg, fb), 0.2);
-	
-	// Color tone
-//	float tone_lum = lum;
-//	float fr = (c.r * 0.393) + (c.g * 0.769) + (c.b * 0.189);
-//	float fg = (c.r * 0.349) + (c.g * 0.686) + (c.b * 0.168);
-//	float fb = (c.r * 0.272) + (c.g * 0.534) + (c.b * 0.131);
-//	vec3 new_tone = rgb2hsv(vec3(fr,fg,fb));
-//	new_tone.r = 0.67;
-//	new_tone = hsv2rgb(new_tone);
-//	c.rgb = mix(c.rgb, new_tone, 0.2 * (1.0 - tone_lum));
-	
-	// Vignette
-	float vignette = 1.0 - distance(SCREEN_UV * vec2(1.0, 0.8), vec2(0.5, 0.5)* vec2(1.0, 0.8)) * 2.0;
-//	vignette = smoothstep(-0.75, 0.75, vignette);
-	vignette = clamp((vignette / 2.0 + 0.5) + lum, 0.0, 1.0);
-	c.rgb *= vignette;
-	
-	// Final adjustments
-//	float lo_r = c.r * c.r;
-//	float lo_g = c.g * c.g;
-//	float lo_b = c.b * c.b;
-//	float hi_r = 1.0 - (1.0-c.r) * (1.0-c.r);
-//	float hi_g = 1.0 - (1.0-c.g) * (1.0-c.g);
-//	float hi_b = 1.0 - (1.0-c.b) * (1.0-c.b);
-//	vec3 curved = mix(vec3(lo_r, lo_g, lo_b), vec3(hi_r, hi_g, hi_b), lum);
-//	COLOR.rgb = mix(c.rgb, curved, 0.5);
-
-	COLOR.r = clamp(c.r, 0.0, 1.0);
-	COLOR.g = clamp(c.g, 0.0, 1.0);
-	COLOR.b = clamp(c.b, 0.0, 1.0);
-}"
-
-[sub_resource type="ShaderMaterial" id=48]
-
-shader = SubResource( 47 )
-shader_param/brightness = 1.0
-shader_param/contrast = 1.0
-shader_param/saturation = 1.0
+shader = ExtResource( 27 )
+shader_param/curves_on = true
+shader_param/curve_s_on = false
+shader_param/curve_mix = 1.0
+shader_param/curvetex = ExtResource( 28 )
 
 [node name="Game" type="Node"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource( 1 )
 script = ExtResource( 2 )
-dlabel = NodePath("../Control/DebugLabel")
+dlabel = NodePath("../Control/Minimap/DebugLabel")
 wind_tex = SubResource( 2 )
 sun = NodePath("Sun")
 clouds = NodePath("Clouds")
@@ -502,56 +417,57 @@ projection = 1
 current = true
 size = 3200.0
 far = 1024.0
-script = ExtResource( 3 )
+script = SubResource( 4 )
 target = NodePath("../../Ground")
 
 [node name="Map water" type="MeshInstance" parent="WorldEnvironment/Map viewport/Map cam"]
 transform = Transform( 1, 0, 0, 0, -4.47035e-08, -1, 0, 1, -4.47035e-08, 0, 8.9407e-06, -200 )
 visible = false
 layers = 2
-material_override = SubResource( 4 )
-mesh = SubResource( 5 )
+material_override = SubResource( 5 )
+mesh = SubResource( 6 )
 material/0 = null
 
 [node name="Sun" type="DirectionalLight" parent="WorldEnvironment"]
 transform = Transform( -0.999164, -0.0254607, -0.0320002, -0.0390469, 0.826485, 0.561602, 0.0121489, 0.562382, -0.826788, 0, 0, 35.7631 )
-directional_shadow_max_distance = 128.0
+directional_shadow_depth_range = 1
+directional_shadow_max_distance = 512.0
 
 [node name="Clouds" type="MeshInstance" parent="WorldEnvironment" groups=[
 "Wind",
 ]]
 transform = Transform( 13.2385, 0, 0, 0, 13.2385, 0, 0, 0, 13.2385, -1.6521, 12.5305, 0 )
-material_override = ExtResource( 4 )
+material_override = ExtResource( 3 )
 cast_shadow = 0
-mesh = SubResource( 6 )
+mesh = SubResource( 7 )
 material/0 = null
-script = ExtResource( 5 )
+script = ExtResource( 4 )
 sun = NodePath("../Sun")
 
 [node name="Ground" type="MeshInstance" parent="WorldEnvironment"]
 layers = 3
-material_override = ExtResource( 6 )
-script = ExtResource( 7 )
+material_override = ExtResource( 5 )
+cast_shadow = 0
+script = ExtResource( 6 )
 
 [node name="StaticBody" type="StaticBody" parent="WorldEnvironment/Ground"]
 
 [node name="CollisionShape" type="CollisionShape" parent="WorldEnvironment/Ground/StaticBody"]
-shape = SubResource( 7 )
 
 [node name="Water" type="MeshInstance" parent="WorldEnvironment" groups=[
 "Wind",
 ]]
 editor/display_folded = true
 visible = false
-material_override = SubResource( 10 )
+material_override = SubResource( 11 )
 cast_shadow = 0
-mesh = SubResource( 11 )
+mesh = SubResource( 12 )
 material/0 = null
-script = ExtResource( 9 )
+script = ExtResource( 8 )
 
 [node name="Lod" type="MeshInstance" parent="WorldEnvironment/Water"]
-material_override = ExtResource( 10 )
-mesh = SubResource( 5 )
+material_override = ExtResource( 9 )
+mesh = SubResource( 6 )
 material/0 = null
 
 [node name="GroundObjs" type="Spatial" parent="WorldEnvironment"]
@@ -561,277 +477,238 @@ material/0 = null
 ]]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 0 )
-material_override = ExtResource( 11 )
-multimesh = SubResource( 12 )
-script = ExtResource( 13 )
-world = NodePath("../..")
-far_distance = 0.5
-spacing = 12.0
-treshold = 0.65
-area_treshold = 0.6
-area_size = 18.0
-slope_max = 0.4
+material_override = ExtResource( 10 )
+multimesh = SubResource( 13 )
+script = ExtResource( 12 )
+far_distance = 0.25
+area_1_treshold = 0.1
+area_2_treshold = 0.1
+slope_min = 0.1
 align_with_ground = false
-altitude_min = 32.0
-altitude_max = 160.0
-base_scale = 2.0
-random_scale = 1.0
-index = 6
+altitude_min = 16.0
 
 [node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Spruce"]
-material_override = SubResource( 13 )
+material_override = SubResource( 14 )
 cast_shadow = 0
-multimesh = SubResource( 14 )
+multimesh = SubResource( 15 )
 
 [node name="Oak trunk" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 31.4419, 0, 0 )
-material_override = SubResource( 15 )
-multimesh = SubResource( 16 )
-script = ExtResource( 13 )
-world = NodePath("../..")
-far_distance = 0.35
-spacing = 20.0
-treshold = 0.7
-area_treshold = 0.65
-area_size = 18.0
-altitude_max = 32.0
-base_scale = 20.0
-random_scale = 17.0
-index = 5
+material_override = SubResource( 16 )
+multimesh = SubResource( 17 )
+script = ExtResource( 12 )
+random_seed = 1
+far_distance = 0.2
+spacing = 25.0
+area_1_treshold = 0.2
+area_2_size_multiplier = 50.0
+area_affects_treshold = false
+slope_max = 0.1
+altitude_min = 5.0
+altitude_max = 250.0
+base_scale = 10.0
+random_scale = 8.0
 
 [node name="Oak leaves" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 31.4419, 0, 0 )
-material_override = SubResource( 17 )
-multimesh = SubResource( 18 )
-script = ExtResource( 13 )
-world = NodePath("../..")
-far_distance = 0.35
-spacing = 20.0
-treshold = 0.7
-area_treshold = 0.65
-area_size = 18.0
-altitude_max = 32.0
-base_scale = 20.0
-random_scale = 17.0
-index = 5
-
-[node name="Oak trunk2" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 31.4419, 0, 0 )
-material_override = SubResource( 15 )
+material_override = SubResource( 18 )
 multimesh = SubResource( 19 )
-script = ExtResource( 13 )
-world = NodePath("../..")
-far_distance = 0.35
-spacing = 16.0
-treshold = 0.65
-altitude_min = 6.0
-base_scale = 20.0
-random_scale = 17.0
-index = 7
-
-[node name="Oak leaves2" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 31.4419, 0, 0 )
-material_override = SubResource( 17 )
-multimesh = SubResource( 20 )
-script = ExtResource( 13 )
-world = NodePath("../..")
-far_distance = 0.35
-spacing = 16.0
-treshold = 0.7
-altitude_min = 6.0
-altitude_max = 64.0
-base_scale = 20.0
-random_scale = 17.0
-index = 7
+script = ExtResource( 12 )
+random_seed = 1
+far_distance = 0.2
+spacing = 25.0
+area_1_treshold = 0.22
+area_2_size_multiplier = 50.0
+area_affects_treshold = false
+slope_max = 0.1
+altitude_min = 5.0
+altitude_max = 250.0
+base_scale = 10.0
+random_scale = 8.0
 
 [node name="Grass" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs" groups=[
 "Wind",
 ]]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 0 )
-visible = false
-material_override = SubResource( 22 )
+material_override = SubResource( 21 )
 cast_shadow = 0
-multimesh = SubResource( 23 )
-script = ExtResource( 13 )
-world = NodePath("../..")
-far_distance = 0.02
+multimesh = SubResource( 22 )
+script = ExtResource( 12 )
+random_seed = 2
+far_distance = 0.03
 far_fade = true
-spacing = 0.25
-treshold = 0.7
-area_treshold = 0.4
-slope_max = 1.0
+spacing = 2.0
+area_1_treshold = 0.1
+area_2_treshold = 0.05
+area_2_size_multiplier = 3.0
+area_affects_treshold = false
 altitude_min = 16.0
-altitude_max = 100.0
-base_scale = 0.3
-random_scale = 0.15
-index = 4
+altitude_max = 80.0
+base_scale = 0.4
+random_scale = 0.2
 
 [node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Grass"]
-material_override = SubResource( 25 )
+material_override = SubResource( 24 )
 cast_shadow = 0
-multimesh = SubResource( 26 )
-
-[node name="Less Grass" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs" groups=[
-"Wind",
-]]
-editor/display_folded = true
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0, 0 )
-visible = false
-material_override = SubResource( 22 )
-cast_shadow = 0
-multimesh = SubResource( 27 )
-script = ExtResource( 13 )
-world = NodePath("../..")
-far_distance = 0.02
-far_fade = true
-spacing = 1.0
-treshold = 0.7
-area_treshold = 0.4
-slope_max = 1.0
-altitude_min = 16.0
-altitude_max = 100.0
-base_scale = 0.3
-random_scale = 0.15
-index = 4
-
-[node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Less Grass"]
-material_override = SubResource( 25 )
-cast_shadow = 0
-multimesh = SubResource( 28 )
+multimesh = SubResource( 25 )
 
 [node name="Rocks" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 0, 0 )
-material_override = SubResource( 29 )
-cast_shadow = 0
-multimesh = SubResource( 30 )
-script = ExtResource( 13 )
-world = NodePath("../..")
-far_distance = 0.3
+material_override = SubResource( 26 )
+multimesh = SubResource( 27 )
+script = ExtResource( 12 )
+random_seed = 3
+far_distance = 0.2
 far_fade = true
-spacing = 10.0
-treshold = 0.45
-area_treshold = 0.75
-area_size = 3.0
-slope_max = 1.0
+spacing = 16.0
+area_1_treshold = 0.5
+area_2_treshold = 0.1
+slope_max = 0.5
 altitude_min = 0.0
-base_scale = 3.0
-random_scale = 2.7
-index = 3
+base_scale = 5.0
+random_scale = 4.0
 
 [node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Rocks"]
-material_override = SubResource( 31 )
+material_override = SubResource( 28 )
 cast_shadow = 0
-multimesh = SubResource( 32 )
+multimesh = SubResource( 29 )
 
 [node name="Plant" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs" groups=[
 "Wind",
 ]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16 )
-material_override = SubResource( 33 )
+material_override = SubResource( 30 )
 cast_shadow = 0
-multimesh = SubResource( 34 )
-script = ExtResource( 13 )
-world = NodePath("../..")
-treshold = 0.5
-area_treshold = 0.65
-area_size = 15.0
+multimesh = SubResource( 31 )
+script = ExtResource( 12 )
+random_seed = 4
+spacing = 5.0
+area_1_treshold = 0.0
+area_2_treshold = 0.1
+area_affects_treshold = false
 altitude_min = 0.0
-altitude_max = 6.0
-base_scale = 1.3
-index = 2
+altitude_max = 2.0
+base_scale = 2.5
+random_scale = 1.0
+area_affects_scale = false
 
 [node name="Bush" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs" groups=[
 "Wind",
 ]]
 editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 16 )
-material_override = SubResource( 35 )
+material_override = SubResource( 32 )
 cast_shadow = 0
-multimesh = SubResource( 36 )
-script = ExtResource( 13 )
-world = NodePath("../..")
+multimesh = SubResource( 33 )
+script = ExtResource( 12 )
+random_seed = 5
+far_distance = 0.07
 far_fade = true
-spacing = 4.0
-area_treshold = 0.67
-area_size = 5.0
-slope_max = 0.4
-base_scale = 0.3
-random_scale = 0.2
-index = 1
+spacing = 7.0
+area_2_size_multiplier = 15.0
+altitude_max = 180.0
+base_scale = 0.5
 
 [node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Bush"]
-material_override = SubResource( 37 )
+material_override = SubResource( 34 )
 cast_shadow = 0
-multimesh = SubResource( 38 )
+multimesh = SubResource( 35 )
 
 [node name="Shrooms" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
 editor/display_folded = true
+visible = false
+material_override = SubResource( 36 )
+cast_shadow = 0
+multimesh = SubResource( 37 )
+script = ExtResource( 12 )
+random_seed = 6
+
+[node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Shrooms"]
 material_override = SubResource( 39 )
 cast_shadow = 0
 multimesh = SubResource( 40 )
-script = ExtResource( 13 )
-world = NodePath("../..")
-far_distance = 0.02
-far_fade = true
-spacing = 0.5
-treshold = 0.7
-area_treshold = 0.75
-altitude_min = 20.0
-altitude_max = 64.0
-base_scale = 0.4
-random_scale = 0.2
-
-[node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Shrooms"]
-material_override = SubResource( 42 )
-cast_shadow = 0
-multimesh = SubResource( 43 )
 
 [node name="Camera" type="Camera" parent="WorldEnvironment"]
 transform = Transform( 1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.5, 3 )
 cull_mask = 1048573
 current = true
-script = ExtResource( 23 )
+script = ExtResource( 22 )
 
-[node name="Map symbol" type="MeshInstance" parent="WorldEnvironment/Camera"]
-transform = Transform( 80, 0, 0, 0, -3.49691e-06, 10, 0, -80, -4.37114e-07, 0, -1.19209e-07, -1.49012e-07 )
-visible = false
-layers = 2
+[node name="SpawnBox" type="Spatial" parent="WorldEnvironment/Camera"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.42582 )
+script = ExtResource( 23 )
+box = NodePath("Box")
+aimbox = NodePath("AimBox")
+smallbox = NodePath("Smallbox")
+
+[node name="Box" type="RigidBody" parent="WorldEnvironment/Camera/SpawnBox"]
+editor/display_folded = true
+input_ray_pickable = false
+physics_material_override = SubResource( 41 )
+contacts_reported = 1
+contact_monitor = true
+script = ExtResource( 24 )
+stop_on_collision = false
+
+[node name="CollisionShape" type="CollisionShape" parent="WorldEnvironment/Camera/SpawnBox/Box"]
+shape = SubResource( 42 )
+
+[node name="MeshInstance" type="MeshInstance" parent="WorldEnvironment/Camera/SpawnBox/Box"]
+material_override = SubResource( 43 )
+mesh = ExtResource( 17 )
+material/0 = null
+
+[node name="Smallbox" type="RigidBody" parent="WorldEnvironment/Camera/SpawnBox"]
+input_ray_pickable = false
+mass = 0.3
+physics_material_override = SubResource( 41 )
+contacts_reported = 1
+contact_monitor = true
+script = ExtResource( 24 )
+
+[node name="CollisionShape" type="CollisionShape" parent="WorldEnvironment/Camera/SpawnBox/Smallbox"]
+transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0 )
+shape = SubResource( 42 )
+
+[node name="MeshInstance" type="MeshInstance" parent="WorldEnvironment/Camera/SpawnBox/Smallbox"]
+transform = Transform( 0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0 )
+material_override = SubResource( 43 )
+mesh = ExtResource( 17 )
+material/0 = null
+
+[node name="AimBox" type="Spatial" parent="WorldEnvironment/Camera/SpawnBox"]
+editor/display_folded = true
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.43789 )
+
+[node name="MeshInstance" type="MeshInstance" parent="WorldEnvironment/Camera/SpawnBox/AimBox"]
 material_override = SubResource( 44 )
-cast_shadow = 0
-mesh = SubResource( 45 )
+mesh = ExtResource( 17 )
 material/0 = null
 
 [node name="Control" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="DebugLabel" type="Label" parent="Control"]
+[node name="DebugLabel2" type="Label" parent="Control"]
 visible = false
-margin_right = 40.0
-margin_bottom = 14.0
-text = "Hi"
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 14.0
+margin_top = -68.0
+margin_right = 233.0
+text = "hold shift for flying mode
+press home to teleport
+mouse buttons throw snowballs"
 
-[node name="Minimap v1" type="TextureRect" parent="Control"]
-visible = false
-anchor_left = 1.0
-anchor_right = 1.0
-margin_right = 256.0
-margin_bottom = 165.0
-rect_scale = Vector2( -1, 1 )
-rect_clip_content = true
-texture = SubResource( 46 )
-stretch_mode = 4
-
-[node name="Minimap v2" type="ColorRect" parent="Control"]
-editor/display_folded = true
+[node name="Minimap" type="ColorRect" parent="Control"]
 margin_right = 256.0
 margin_bottom = 192.0
 rect_clip_content = true
 color = Color( 0, 0, 0, 0.0941176 )
 
-[node name="Map" type="TextureRect" parent="Control/Minimap v2"]
+[node name="Map" type="TextureRect" parent="Control/Minimap"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -32.0
@@ -839,7 +716,7 @@ margin_top = -32.0
 margin_right = 32.0
 margin_bottom = 32.0
 rect_clip_content = true
-script = ExtResource( 24 )
+script = ExtResource( 25 )
 world = NodePath("../../../WorldEnvironment")
 viewpoint = NodePath("../../../WorldEnvironment/Camera")
 water_color = Color( 0.176471, 0.176471, 0.176471, 0.784314 )
@@ -848,57 +725,63 @@ grass_color = Color( 0.266667, 0.211765, 0.133333, 0.784314 )
 mountain_color = Color( 0.0862745, 0.109804, 0.14902, 0.784314 )
 snow_color = Color( 1, 1, 1, 0.784314 )
 
-[node name="PlayerPos" type="Polygon2D" parent="Control/Minimap v2"]
+[node name="PlayerPos" type="Polygon2D" parent="Control/Minimap"]
 position = Vector2( 108.446, 20.2931 )
 polygon = PoolVector2Array( 7, 4, 0, -7, -7, 4, 0, 0 )
 color = Color( 0.294118, 0.698039, 0.235294, 1 )
-script = ExtResource( 25 )
+script = ExtResource( 26 )
 target = NodePath("../../../WorldEnvironment/Camera")
 rotate = true
 
-[node name="StartPos" type="Polygon2D" parent="Control/Minimap v2"]
+[node name="StartPos" type="Polygon2D" parent="Control/Minimap"]
+visible = false
 position = Vector2( 154.058, 47.1718 )
 polygon = PoolVector2Array( 5, 0, 0, -7, -5, 0, 0, 7 )
 color = Color( 0.937255, 0.988235, 0.0313726, 1 )
-script = ExtResource( 25 )
-target = NodePath("../../../WorldEnvironment/GroundObjs/Spruce")
+script = ExtResource( 26 )
+target = NodePath("../../../WorldEnvironment/Ground")
+
+[node name="DebugLabel" type="Label" parent="Control/Minimap"]
+margin_left = 3.4295
+margin_top = 4.28687
+margin_right = 43.4295
+margin_bottom = 18.2869
+text = "Hi"
 
 [node name="PostProcessing" type="ColorRect" parent="Control"]
-visible = false
-material = SubResource( 48 )
+material = SubResource( 45 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Music" type="Node" parent="."]
-editor/display_folded = true
-script = ExtResource( 26 )
+script = ExtResource( 29 )
 
 [node name="Drums" type="AudioStreamPlayer" parent="Music"]
-stream = ExtResource( 27 )
+stream = ExtResource( 30 )
 volume_db = -80.0
 autoplay = true
 bus = "Drums"
 
 [node name="Bass" type="AudioStreamPlayer" parent="Music"]
-stream = ExtResource( 28 )
+stream = ExtResource( 31 )
 volume_db = -80.0
 autoplay = true
 bus = "Bass"
 
 [node name="Cheese" type="AudioStreamPlayer" parent="Music"]
-stream = ExtResource( 29 )
+stream = ExtResource( 32 )
 volume_db = -80.0
 autoplay = true
 bus = "Cheese"
 
 [node name="Pad" type="AudioStreamPlayer" parent="Music"]
-stream = ExtResource( 30 )
+stream = ExtResource( 33 )
 volume_db = -80.0
 autoplay = true
 bus = "Pad"
 
 [node name="Screenshot" type="Node" parent="."]
-script = ExtResource( 31 )
+script = ExtResource( 34 )
 shortcut_action = "ui_accept"
 file_prefix = "nice_shot"
 output_path = "res://Screenshots"
