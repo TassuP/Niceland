@@ -22,6 +22,12 @@ func get_h(pos):
 	pos.y *= 0.1 + pos.y * pos.y
 	pos.y *= 1024.0
 	pos.y += 32.0
+	
+	# bigger scale stuff
+	var y2 = _noise.get_noise_2d(pos.x / 5.0, pos.z / 5.0)
+	y2 *= 500.0
+	pos.y += y2
+	
 	if(pos.y <= 0.2):
 		pos.y -= 1.0
 	else:
