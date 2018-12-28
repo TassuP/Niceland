@@ -1,7 +1,7 @@
 extends MeshInstance
 
-# World node is optional
-export (NodePath) var world
+export var use_radial_grid = true
+export var generate_collider = true
 
 var noise = preload("res://Scripts/HeightGenerator.gd").new()
 
@@ -12,7 +12,7 @@ var view_point
 var last_point
 var gen_time
 
-var near_far_limit_i = 0
+var near_far_limit_i = -1
 var upd_distance = 16
 
 func _ready():
@@ -71,27 +71,13 @@ func finish_generating():
 		msh = generate([view_point, noise])
 	self.set_mesh(msh)
 	
-	
-	$StaticBody/CollisionShape.set_shape(msh.create_trimesh_shape())
-#	print("surf count ",msh.get_surface_count())
-#	print("face count ",msh.get_faces().size())
-	
-	# Generate collider
-#	var shp = ConcavePolygonShape.new()
-#	shp.set_faces(msh.get_faces())
-#	$StaticBody/CollisionShape.set_shape(shp)
-#	$StaticBody/CollisionShape.set_disabled(false)
-	
-	# Generate collider
-#	$Collider/CollisionShape.set_faces(msh.get_faces())
-#	$Collider/CollisionShape.set_shape(col_shape)
-#	$Collider/CollisionShape.set_disabled(false)
-	
 	gen_time = OS.get_ticks_msec() - gen_time
 	print("Ground generated in ", gen_time, " msec")
 	transform.origin = view_point
 	last_point = view_point
-	set_process(true)
+	
+	if(Globals.generate_just_once == false):
+		set_process(true)
 	
 
 func generate(userdata):
@@ -127,11 +113,10 @@ func generate(userdata):
 	# SurfaceTool to Mesh
 	var msh = Mesh.new()
 	msh = surf.commit()
-
-#	var shp = ConcavePolygonShape.new()
-#	shp.set_faces(msh.get_faces())
-#	$StaticBody/CollisionShape.set_shape(shp)
-#	$StaticBody/CollisionShape.set_disabled(false)
+	
+	if(generate_collider):
+		var shp = msh.create_trimesh_shape()
+		$StaticBody/CollisionShape.call_deferred("set_shape", shp)
 	
 	if(use_threading):
 		call_deferred("finish_generating")
@@ -145,60 +130,65 @@ func init_genverts():
 	
 	# Radial web
 	var x = 0.0
-	while(x < pi2):
-		var s = small_step
-		var z = Globals.ground_size / 10.0 - Globals.ground_lod_step
-		while(z <= Globals.ground_size):
-			
-			var z1 = z
-			var z2 = z + s
-			
-			var p1 = Vector3(z1, 0.0, z1)
-			var p2 = Vector3(z1, 0.0, z1)
-			var p3 = Vector3(z2, 0.0, z2)
-			var p4 = Vector3(z2, 0.0, z2)
-			
-			p1.x *= sin(x)
-			p1.z *= cos(x)
-			
-			p2.x *= sin(x + a)
-			p2.z *= cos(x + a)
-			
-			p3.x *= sin(x + a)
-			p3.z *= cos(x + a)
-			
-			p4.x *= sin(x)
-			p4.z *= cos(x)
-			
-			# Stepifying slightly helps with jumps between lods
-			p1.x = stepify(p1.x, Globals.ground_lod_step)
-			p1.z = stepify(p1.z, Globals.ground_lod_step)
-			p2.x = stepify(p2.x, Globals.ground_lod_step)
-			p2.z = stepify(p2.z, Globals.ground_lod_step)
-			p3.x = stepify(p3.x, Globals.ground_lod_step)
-			p3.z = stepify(p3.z, Globals.ground_lod_step)
-			p4.x = stepify(p4.x, Globals.ground_lod_step)
-			p4.z = stepify(p4.z, Globals.ground_lod_step)
-			
-			gen_verts.append(p1)
-			gen_verts.append(p2)
-			gen_verts.append(p3)
-
-			gen_verts.append(p3)
-			gen_verts.append(p4)
-			gen_verts.append(p1)
-			
-			z += s
-#			s *= 2.0
-			s += Globals.ground_lod_step * 2.0
-			
-		x += a
+	if(use_radial_grid == true):
+		while(x < pi2):
+			var s = small_step
+			var z = Globals.ground_size / 10.0 - Globals.ground_lod_step
+			while(z <= Globals.ground_size):
+				
+				var z1 = z
+				var z2 = z + s
+				
+				var p1 = Vector3(z1, 0.0, z1)
+				var p2 = Vector3(z1, 0.0, z1)
+				var p3 = Vector3(z2, 0.0, z2)
+				var p4 = Vector3(z2, 0.0, z2)
+				
+				p1.x *= sin(x)
+				p1.z *= cos(x)
+				
+				p2.x *= sin(x + a)
+				p2.z *= cos(x + a)
+				
+				p3.x *= sin(x + a)
+				p3.z *= cos(x + a)
+				
+				p4.x *= sin(x)
+				p4.z *= cos(x)
+				
+				# Stepifying slightly helps with jumps between lods
+				p1.x = stepify(p1.x, Globals.ground_lod_step)
+				p1.z = stepify(p1.z, Globals.ground_lod_step)
+				p2.x = stepify(p2.x, Globals.ground_lod_step)
+				p2.z = stepify(p2.z, Globals.ground_lod_step)
+				p3.x = stepify(p3.x, Globals.ground_lod_step)
+				p3.z = stepify(p3.z, Globals.ground_lod_step)
+				p4.x = stepify(p4.x, Globals.ground_lod_step)
+				p4.z = stepify(p4.z, Globals.ground_lod_step)
+				
+				gen_verts.append(p1)
+				gen_verts.append(p2)
+				gen_verts.append(p3)
 	
-	near_far_limit_i = gen_verts.size()
+				gen_verts.append(p3)
+				gen_verts.append(p4)
+				gen_verts.append(p1)
+				
+				z += s
+	#			s *= 2.0
+				s += Globals.ground_lod_step * 2.0
+				
+			x += a
+		
+		near_far_limit_i = gen_verts.size()
 	
 	# Square grid
 	var s = Globals.ground_lod_step# * 4.0
-	var w = Globals.ground_size / 10.0 + s
+	var w = Globals.ground_size + s
+	
+	if(use_radial_grid == true):
+		w = Globals.ground_size / 10.0 + s
+	
 	x = -w
 	while(x < w):
 		var z = -w
