@@ -477,6 +477,7 @@ area_2_treshold = 0.1
 slope_min = 0.1
 align_with_ground = false
 altitude_min = 16.0
+collision_mesh = ExtResource( 11 )
 
 [node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Spruce"]
 material_override = SubResource( 13 )
@@ -499,6 +500,7 @@ altitude_min = 5.0
 altitude_max = 250.0
 base_scale = 10.0
 random_scale = 8.0
+collision_mesh = ExtResource( 14 )
 
 [node name="Oak leaves" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 31.4419, 0, 0 )
@@ -560,7 +562,7 @@ slope_max = 0.5
 altitude_min = 0.0
 base_scale = 5.0
 random_scale = 4.0
-collision_mesh = ExtResource( 18 )
+collision_mesh = ExtResource( 17 )
 
 [node name="Lod" type="MultiMeshInstance" parent="WorldEnvironment/GroundObjs/Rocks"]
 material_override = SubResource( 27 )

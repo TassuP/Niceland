@@ -23,6 +23,7 @@ var pool_size = 0
 # These are calculated from ground_size
 var view_distance
 var upd_distance
+var col_distance
 
 var thread = Thread.new()
 var view_point
@@ -49,14 +50,13 @@ func _ready():
 	
 	noise.init()
 	
-#	view_distance = float(ground_size) / 64.0
-#	upd_distance = float(view_distance) / 8.0
 	view_distance = float(Globals.ground_size)
 	upd_distance = float(view_distance)
 	view_distance *= far_distance
 	upd_distance *= far_distance / 4.0
-	
+	col_distance = upd_distance * 1.5
 	lod_dist = view_distance * 0.5
+	
 	if(use_only_lod):
 		lod_dist = -1
 	
@@ -92,7 +92,7 @@ func _ready():
 
 func get_vp():
 	var p = get_viewport().get_camera().get_global_transform().origin
-	p -= get_viewport().get_camera().get_global_transform().basis.z * view_distance * 0.8
+#	p -= get_viewport().get_camera().get_global_transform().basis.z * view_distance * 0.8
 	p.y = 0.0
 	return p
 
@@ -118,7 +118,9 @@ func finish_generating():
 	
 	if(arr.size() > pool_size):
 		pool_size += (arr.size() - pool_size) * 2
-		print("Set max ", name, " count to ", pool_size)
+		
+		if(verbose):
+			print("Set max ", name, " count to ", pool_size)
 		
 		multimesh.set_instance_count(pool_size)
 		if(has_lod):
@@ -159,39 +161,6 @@ func finish_generating():
 			else:
 				multimesh.set_instance_transform(i, hidden_transform)
 			i += 1
-	
-	
-	# Add collision shapes to $Collider
-#	if(has_collider):
-#		i = 0
-#		# Disable all collision shapes at first
-#		while(i < $Collider.get_child_count()):
-#			var cs = $Collider.get_child(i)
-#			cs.transform = hidden_transform
-#			cs.disabled = true
-#			cs.hide()
-#			i += 1
-#		i = 0
-#		while(i < arr.size()):
-#
-#			# Add a new CollisionShape to pool
-#			if(i >= $Collider.get_child_count()):
-#				if(verbose):
-#					print("Increase ",name, " collision shape count to ", i + 1)
-#				var new_cs = CollisionShape.new()
-#				new_cs.set_shape(col_shape)
-#				new_cs.transform = arr[i]
-#				$Collider.add_child(new_cs, true)
-#
-#			# Enable shape and set it's transform
-#			var cs = $Collider.get_child(i)
-#			cs.transform = arr[i]
-#			cs.disabled = false
-#			cs.show()
-#			i += 1
-	
-	
-	
 	
 	gen_time = OS.get_ticks_msec() - gen_time
 	if(verbose or gen_time >= 2000.0):
@@ -284,18 +253,20 @@ func generate(userdata):
 							# Append transform to list
 							arr.append(tr)
 							
+							# Add a CollisionShape
 							if(has_collider):
-								var cs = CollisionShape.new()
-								cs.set_shape(col_shape)
-								cs.transform = tr
-								sb.add_child(cs)
+								if(abs(x) < col_distance):
+									if(abs(z) < col_distance):
+										var cs = CollisionShape.new()
+										cs.set_shape(col_shape)
+										cs.transform = tr
+										sb.add_child(cs)
 			
 			z += spacing
 		x += spacing
 	
 	if(has_collider):
 		call_deferred("new_sb", sb)
-#		call_deferred("add_child", sb)
 	
 	call_deferred("finish_generating")
 	return arr
@@ -303,7 +274,8 @@ func generate(userdata):
 var old_sb
 func new_sb(sb):
 	if(old_sb != null):
-		old_sb.queue_free()
+		if(old_sb.is_queued_for_deletion() == false):
+			old_sb.queue_free()
 
 	add_child(sb)
 	old_sb = sb
