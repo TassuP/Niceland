@@ -77,9 +77,6 @@ func _ready():
 	if(collision_mesh != null):
 		has_collider = true
 		col_shape = collision_mesh.create_convex_shape()
-		var st = StaticBody.new()
-		st.name = "Collider"
-		add_child(st)
 	
 	
 	
@@ -165,33 +162,33 @@ func finish_generating():
 	
 	
 	# Add collision shapes to $Collider
-	if(has_collider):
-		i = 0
-		# Disable all collision shapes at first
-		while(i < $Collider.get_child_count()):
-			var cs = $Collider.get_child(i)
-			cs.transform = hidden_transform
-			cs.disabled = true
-			cs.hide()
-			i += 1
-		i = 0
-		while(i < arr.size()):
-			
-			# Add a new CollisionShape to pool
-			if(i >= $Collider.get_child_count()):
-				if(verbose):
-					print("Increase ",name, " collision shape count to ", i + 1)
-				var new_cs = CollisionShape.new()
-				new_cs.set_shape(col_shape)
-				new_cs.transform = arr[i]
-				$Collider.add_child(new_cs, true)
-			
-			# Enable shape and set it's transform
-			var cs = $Collider.get_child(i)
-			cs.transform = arr[i]
-			cs.disabled = false
-			cs.show()
-			i += 1
+#	if(has_collider):
+#		i = 0
+#		# Disable all collision shapes at first
+#		while(i < $Collider.get_child_count()):
+#			var cs = $Collider.get_child(i)
+#			cs.transform = hidden_transform
+#			cs.disabled = true
+#			cs.hide()
+#			i += 1
+#		i = 0
+#		while(i < arr.size()):
+#
+#			# Add a new CollisionShape to pool
+#			if(i >= $Collider.get_child_count()):
+#				if(verbose):
+#					print("Increase ",name, " collision shape count to ", i + 1)
+#				var new_cs = CollisionShape.new()
+#				new_cs.set_shape(col_shape)
+#				new_cs.transform = arr[i]
+#				$Collider.add_child(new_cs, true)
+#
+#			# Enable shape and set it's transform
+#			var cs = $Collider.get_child(i)
+#			cs.transform = arr[i]
+#			cs.disabled = false
+#			cs.show()
+#			i += 1
 	
 	
 	
@@ -212,6 +209,11 @@ func generate(userdata):
 	
 	pos.x = stepify(pos.x, spacing)
 	pos.z = stepify(pos.z, spacing)
+	
+	var sb
+	if(has_collider):
+		sb = StaticBody.new()
+		sb.name = "Collider"
 	
 	var w = stepify(float(view_distance), spacing)
 	var x = -w
@@ -281,9 +283,18 @@ func generate(userdata):
 							
 							# Append transform to list
 							arr.append(tr)
+							
+							if(has_collider):
+								var cs = CollisionShape.new()
+								cs.set_shape(col_shape)
+								cs.transform = tr
+								sb.add_child(cs)
 			
 			z += spacing
 		x += spacing
+	
+	if(has_collider):
+		call_deferred("add_child", sb)
 	
 	call_deferred("finish_generating")
 	return arr
