@@ -213,7 +213,7 @@ func generate(userdata):
 	var sb
 	if(has_collider):
 		sb = StaticBody.new()
-		sb.name = "Collider"
+		sb.name = "StaticBody"
 	
 	var w = stepify(float(view_distance), spacing)
 	var x = -w
@@ -294,7 +294,17 @@ func generate(userdata):
 		x += spacing
 	
 	if(has_collider):
-		call_deferred("add_child", sb)
+		call_deferred("new_sb", sb)
+#		call_deferred("add_child", sb)
 	
 	call_deferred("finish_generating")
 	return arr
+
+var old_sb
+func new_sb(sb):
+	if(old_sb != null):
+		old_sb.queue_free()
+
+	add_child(sb)
+	old_sb = sb
+
