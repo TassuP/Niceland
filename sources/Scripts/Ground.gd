@@ -19,6 +19,14 @@ func _ready():
 	
 	noise.init()
 	
+	if(generate_collider):
+		var sb = StaticBody.new()
+		var cs = CollisionShape.new()
+		sb.name = "StaticBody"
+		cs.name = "CollisionShape"
+		sb.add_child(cs)
+		add_child(sb)
+	
 	set_process(false)
 	
 	upd_distance = float(Globals.ground_size) / 16.0
@@ -114,6 +122,7 @@ func generate(userdata):
 	var msh = Mesh.new()
 	msh = surf.commit()
 	
+	# Collider
 	if(generate_collider):
 		var shp = msh.create_trimesh_shape()
 		$StaticBody/CollisionShape.call_deferred("set_shape", shp)
