@@ -24,7 +24,7 @@ func _process(delta):
 	if(switch_timer <= 0.0):
 		switch_timer = 10.0 + randf() * 10.0
 		current_state = randi() % 5
-		print("Change music state to ", current_state)
+#		print("Change music state to ", current_state)
 	
 	
 	if(Input.is_key_pressed(KEY_1)):

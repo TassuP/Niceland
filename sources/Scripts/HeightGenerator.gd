@@ -3,6 +3,7 @@ extends Node
 var _noise
 
 func init():
+	name = "I'm a HeightGenerator"
 	_noise = make_noise()
 
 func make_noise():

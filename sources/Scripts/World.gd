@@ -53,18 +53,18 @@ func _ready():
 	water = get_node(water)
 	env = get_environment()
 	
-	print("\nexport var day_color_sun = Color(",day_color_sun,")")
-	print("export var day_color_sky = Color(",day_color_sky,")")
-	print("export var day_color_horizon = Color(",day_color_horizon,")")
-	print("export var sunset_color_sun = Color(",sunset_color_sun,")")
-	print("export var sunset_color_sky = Color(",sunset_color_sky,")")
-	print("export var sunset_color_horizon = Color(",sunset_color_horizon,")")
-	print("export var night_color_sun = Color(",night_color_sun,")")
-	print("export var night_color_sky = Color(",night_color_sky,")")
-	print("export var night_color_horizon = Color(",night_color_horizon,")")
-	print("export var dawn_color_sun = Color(",dawn_color_sun,")")
-	print("export var dawn_color_sky = Color(",dawn_color_sky,")")
-	print("export var dawn_color_horizon = Color(",dawn_color_horizon,")\n")
+#	print("\nexport var day_color_sun = Color(",day_color_sun,")")
+#	print("export var day_color_sky = Color(",day_color_sky,")")
+#	print("export var day_color_horizon = Color(",day_color_horizon,")")
+#	print("export var sunset_color_sun = Color(",sunset_color_sun,")")
+#	print("export var sunset_color_sky = Color(",sunset_color_sky,")")
+#	print("export var sunset_color_horizon = Color(",sunset_color_horizon,")")
+#	print("export var night_color_sun = Color(",night_color_sun,")")
+#	print("export var night_color_sky = Color(",night_color_sky,")")
+#	print("export var night_color_horizon = Color(",night_color_horizon,")")
+#	print("export var dawn_color_sun = Color(",dawn_color_sun,")")
+#	print("export var dawn_color_sky = Color(",dawn_color_sky,")")
+#	print("export var dawn_color_horizon = Color(",dawn_color_horizon,")\n")
 	
 	
 	# Setup wind nodes
@@ -84,6 +84,9 @@ func _process(delta):
 	var s = str("Fps: ", Performance.get_monitor(Performance.TIME_FPS), "\n")
 	s = str(s, "pos: ", get_viewport().get_camera().transform.origin, "\n")
 	dlabel.set_text(s)
+	
+#	if(Input.is_action_just_pressed("shoot")):
+#		print_stray_nodes()
 	
 	if(Input.is_key_pressed(KEY_SHIFT)):
 		wind_speed = lerp(wind_speed, 0.2, delta)
