@@ -23,6 +23,16 @@ config/icon="res://icon.png"
 
 Globals="*res://Scripts/Globals.gd"
 
+[debug]
+
+gdscript/warnings/unused_variable=false
+gdscript/warnings/unused_class_variable=false
+gdscript/warnings/unused_argument=false
+
+[display]
+
+window/vsync/use_vsync=false
+
 [input]
 
 ui_scroll_up={
@@ -52,6 +62,7 @@ plot={
 
 [rendering]
 
+threads/thread_model=2
 quality/shadows/filter_mode=0
 quality/reflections/texture_array_reflections=false
 quality/reflections/high_quality_ggx=false

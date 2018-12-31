@@ -1,0 +1,123 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Scripts/Butterfly.gd" type="Script" id=1]
+
+[sub_resource type="Animation" id=1]
+
+resource_name = "FlyingButter"
+length = 0.5
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Body/Wing L:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( -19.4082, -6.58916e-07, -46.7118 ), Vector3( -31.4997, 15.9232, -41.6988 ), Vector3( -38.447, -32.1057, 68.7782 ), Vector3( 5.13848, -5.4309, 19.3338 ), Vector3( -19.4082, -6.58916e-07, -46.7118 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Body/Wing R:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( -19.4082, -1.42335e-06, 51.8317 ), Vector3( -36.618, -11.082, 33.4874 ), Vector3( -40.9455, 40.9429, -70.7451 ), Vector3( 3.78878, 11.2936, -18.2588 ), Vector3( -19.4082, -1.42335e-06, 51.8317 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Body:translation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.2, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 0.2788, 0 ), Vector3( 0, 0, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Body:rotation_degrees")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 19.4082, 0, 0 ), Vector3( -2.96074, 0, 0 ), Vector3( 19.4082, 0, 0 ) ]
+}
+
+[sub_resource type="SpatialMaterial" id=2]
+
+flags_unshaded = true
+params_specular_mode = 4
+albedo_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="CapsuleMesh" id=3]
+
+radius = 0.1
+radial_segments = 5
+rings = 2
+
+[sub_resource type="SpatialMaterial" id=7]
+
+flags_unshaded = true
+params_specular_mode = 4
+params_cull_mode = 2
+albedo_color = Color( 0.392157, 0.0313726, 0.32549, 1 )
+
+[sub_resource type="QuadMesh" id=5]
+
+
+[sub_resource type="SphereShape" id=6]
+
+
+[node name="Butterfly" type="RigidBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.59137 )
+gravity_scale = 0.0
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+script = ExtResource( 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "FlyingButter"
+anims/FlyingButter = SubResource( 1 )
+
+[node name="Body" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.974839, -0.222911, 0, 0.222911, 0.974839, 0, 0.162729, 0 )
+material_override = SubResource( 2 )
+mesh = SubResource( 3 )
+material/0 = null
+
+[node name="Wing L" type="Spatial" parent="Body"]
+transform = Transform( 0.884462, 0.432641, 0.174778, -0.454684, 0.714965, 0.531118, 0.104823, -0.549223, 0.829075, 0, 0.00746194, -0.160224 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Body/Wing L"]
+transform = Transform( 0.770097, -0.637927, 2.09812e-08, 0.0904327, 0.109169, 0.989901, -0.631484, -0.76232, 0.14176, -0.758602, 0, 0 )
+material_override = SubResource( 7 )
+mesh = SubResource( 5 )
+material/0 = null
+
+[node name="Wing R" type="Spatial" parent="Body"]
+transform = Transform( 0.9313, -0.352022, -0.0935994, 0.334641, 0.725374, 0.601538, -0.14386, -0.591534, 0.793342, 0, 0.00746205, -0.160224 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Body/Wing R"]
+transform = Transform( 0.654894, -0.755721, 2.57341e-08, 0.107131, 0.092838, 0.989901, -0.748089, -0.64828, 0.14176, 0.735832, 0, 0 )
+material_override = SubResource( 7 )
+cast_shadow = 0
+mesh = SubResource( 5 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 6 )
+
