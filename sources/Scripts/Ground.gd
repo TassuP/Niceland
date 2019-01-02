@@ -18,6 +18,7 @@ var upd_distance = 16
 func _ready():
 	
 	noise.init()
+	get_viewport().get_camera().far = Globals.ground_size
 	
 	if(generate_collider):
 		var sb = StaticBody.new()

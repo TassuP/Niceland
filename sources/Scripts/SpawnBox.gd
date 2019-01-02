@@ -20,7 +20,7 @@ func snap(p):
 	p.z = stepify(p.z, 2.0)
 	return p
 
-func _process(delta):
+func _physics_process(delta):
 	
 	# Shoot box
 	if(Input.is_action_just_pressed("shoot")):
@@ -28,7 +28,7 @@ func _process(delta):
 		newbox.set_mode(RigidBody.MODE_RIGID)
 		add_child(newbox)
 		newbox.global_transform = global_transform
-		newbox.linear_velocity = -get_parent().transform.basis.z * 20.0
+		newbox.linear_velocity = -get_parent().global_transform.basis.z * 20.0
 		newbox.set_as_toplevel(true)
 		
 	# Place box
