@@ -3,7 +3,7 @@ extends Node
 export var shortcut_action = "" setget set_shortcut_action
 export var file_prefix = ""
 export(int, 'Datetime', 'Unix Timestamp') var file_tag
-export(String, DIR) var output_path = "res://" setget set_output_path
+export(String, DIR) var output_path = "res://" #setget set_output_path
 
 var _tag = ""
 var _index = 0
@@ -41,14 +41,12 @@ func _check_actions(actions=[]):
 				#breakpoint
 				
 func _check_path(path):
-	if OS.is_debug_build():
-		var message = 'WARNING: No directory "%s"'
-		var dir = Directory.new()
-		dir.open(path)
-		if not dir.dir_exists(path):
-			print(message % path)
-			#breakpoint
-			
+	var dir = Directory.new()
+#	dir.open(path)
+	if not dir.dir_exists(path):
+		print("Create folder for screenshots")
+		dir.make_dir(path)
+
 func _update_tags():
 	var time
 	if (file_tag == 1): time = str(OS.get_unix_time())
