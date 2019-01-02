@@ -4,7 +4,7 @@ var t = 0.0
 var dir = Vector3(0.0, 1.0, 0.0)
 
 func _ready():
-	t = 1.0 + randf() * 3.0
+	t = randf()
 
 func _process(delta):
 	t -= delta
@@ -24,5 +24,4 @@ func _process(delta):
 	var b = Quat(l.basis)
 	var c = a.slerp(b, delta)
 	transform.basis = Basis(c)
-	
 	

@@ -78,7 +78,7 @@ func finish_generating():
 	obj_tr_array = ret[1]
 	
 	gen_time = OS.get_ticks_msec() - gen_time
-	if(verbose or gen_time >= 2000.0):
+	if(verbose or gen_time >= 3000.0):
 		print(name," x ", obj_array.size()," in ", gen_time / 1000.0, " s")
 	
 	last_point = view_point

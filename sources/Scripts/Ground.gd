@@ -80,7 +80,7 @@ func finish_generating():
 	self.set_mesh(msh)
 	
 	gen_time = OS.get_ticks_msec() - gen_time
-	print("Ground generated in ", gen_time, " msec")
+	print("Ground generated in ", gen_time / 1000.0, " s")
 	transform.origin = view_point
 	last_point = view_point
 	

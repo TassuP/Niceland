@@ -276,7 +276,7 @@ func new_sb(sb):
 	if(old_sb != null):
 		if(old_sb.is_queued_for_deletion() == false):
 			old_sb.queue_free()
-
+	
 	add_child(sb)
 	old_sb = sb
 
