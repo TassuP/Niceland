@@ -82,7 +82,7 @@ func _ready():
 
 func _process(delta):
 	var s = str("Fps: ", Performance.get_monitor(Performance.TIME_FPS), "\n")
-	s = str(s, "pos: ", get_viewport().get_camera().transform.origin, "\n")
+	s = str(s, "pos: ", get_viewport().get_camera().global_transform.origin, "\n")
 	dlabel.set_text(s)
 	
 #	if(Input.is_action_just_pressed("shoot")):
