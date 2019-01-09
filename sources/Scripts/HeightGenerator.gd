@@ -10,27 +10,31 @@ func make_noise():
 	_noise = OpenSimplexNoise.new()
 	_noise.seed = Globals.game_seed
 	_noise.octaves = 6
-	_noise.period = 1024 * Globals.ground_xz_scale
-	_noise.persistence = 0.4
-	_noise.lacunarity = 2.5
+	_noise.period = 4096.0 * Globals.ground_xz_scale
+	_noise.persistence = 0.35
+	_noise.lacunarity = 3.0
 	return _noise
 
 func get_n(pos):
 	return _noise.get_noise_2d(pos.x, pos.z)
 
 func get_h(pos):
+	# Base noise
 	pos.y = _noise.get_noise_2d(pos.x, pos.z)
-	pos.y *= 0.1 + pos.y * pos.y
-	pos.y *= 1024.0
-	pos.y += 32.0
 	
-	# bigger scale stuff
-	var y2 = _noise.get_noise_2d(pos.x / 5.0, pos.z / 5.0)
-	y2 *= 500.0
-	pos.y += y2
+	# Lift slightly, so there's less water everywhere
+	pos.y += 0.1
 	
-	if(pos.y <= 0.2):
-		pos.y -= 1.0
+	# Make mountains and flatlands more distinct
+	if(pos.y > 0.05):
+		pos.y = pow((pos.y - 0.05) * 1.6, 1.5) + 0.05
+	
+	# Scale everything up
+	pos.y *= 512.0
+	
+	# Make shoreline steeper to avoid z-fighting
+	if(pos.y <= 0.0):
+		pos.y -= 0.5
 	else:
 		pos.y += 0.2
 	return pos.y
