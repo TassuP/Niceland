@@ -42,6 +42,9 @@ export (Mesh) var collision_mesh
 var hidden_transform
 var noise = preload("res://Scripts/HeightGenerator.gd").new()
 
+var quitting = false
+var mutex = Mutex.new()
+
 func _ready():
 	
 	set_process(false)
@@ -60,8 +63,8 @@ func _ready():
 	if(use_only_lod):
 		lod_dist = -1
 	
-	var fade_end = view_distance
-	var fade_start = fade_end - 24.0
+	var fade_end = view_distance - 8.0
+	var fade_start = fade_end - 16.0
 	
 	multimesh.set_instance_count(pool_size)
 	
@@ -114,6 +117,10 @@ func start_generating():
 	thread.start(self, "generate", view_point)
 
 func finish_generating():
+	
+	if(quitting):
+		return
+	
 	var arr = thread.wait_to_finish()
 	
 	if(arr.size() > pool_size):
@@ -189,6 +196,14 @@ func generate(userdata):
 	while(x < w):
 		var z = -w
 		while(z < w):
+			
+			# Not sure if I'm doing this right
+			if(mutex.try_lock() == OK):
+				if(quitting):
+					mutex.unlock()
+					return # Break this loop
+				else:
+					mutex.unlock()
 			
 			var xx = x + pos.x
 			var zz = z + pos.z
@@ -273,6 +288,10 @@ func generate(userdata):
 
 var old_sb
 func new_sb(sb):
+	
+	if(quitting):
+		return
+	
 	if(old_sb != null):
 		if(old_sb.is_queued_for_deletion() == false):
 			old_sb.queue_free()
@@ -280,3 +299,13 @@ func new_sb(sb):
 	add_child(sb)
 	old_sb = sb
 
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+		
+		# Not sure if I'm doing this right
+		mutex.lock()
+		quitting = true # Break loop inside the thread
+		mutex.unlock()
+		
+		if(thread.is_active()):
+			thread.wait_to_finish()

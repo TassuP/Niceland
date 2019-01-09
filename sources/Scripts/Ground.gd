@@ -15,8 +15,10 @@ var gen_time
 var near_far_limit_i = -1
 var upd_distance = 16
 
+var quitting = false
+var mutex = Mutex.new()
+
 func _ready():
-	
 	noise.init()
 	get_viewport().get_camera().far = Globals.ground_size
 	
@@ -73,6 +75,10 @@ func start_generating():
 		finish_generating()
 
 func finish_generating():
+	
+	if(quitting):
+		return
+	
 	var msh
 	if(use_threading):
 		msh = thread.wait_to_finish()
@@ -81,7 +87,7 @@ func finish_generating():
 	self.set_mesh(msh)
 	
 	gen_time = OS.get_ticks_msec() - gen_time
-	print("Ground generated in ", gen_time / 1000.0, " s")
+#	print("Ground generated in ", gen_time / 1000.0, " s")
 	transform.origin = view_point
 	last_point = view_point
 	
@@ -99,6 +105,14 @@ func generate(userdata):
 	surf.add_smooth_group(true)
 	var i = 0
 	while(i < gen_verts.size()):
+		
+		# Not sure if I'm doing this right
+		if(mutex.try_lock() == OK):
+			if(quitting):
+				mutex.unlock()
+				return # Break this loop
+			else:
+				mutex.unlock()
 		
 		# Generate vertex position
 		var p = gen_verts[i] + pos
@@ -221,5 +235,17 @@ func init_genverts():
 		x += s
 		
 	print("Ground tris = ",gen_verts.size() / 3.0)
+
+
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+		
+		# Not sure if I'm doing this right
+		mutex.lock()
+		quitting = true # Break loop inside the thread
+		mutex.unlock()
+		
+		if(thread.is_active()):
+			thread.wait_to_finish()
 
 

@@ -29,6 +29,9 @@ var noise = preload("res://Scripts/HeightGenerator.gd").new()
 var obj_array = []
 var obj_tr_array = []
 
+var quitting = false
+var mutex = Mutex.new()
+
 func _ready():
 	
 	set_process(false)
@@ -73,6 +76,10 @@ func start_generating():
 	thread.start(self, "generate", [view_point, obj_array, obj_tr_array])
 
 func finish_generating():
+	
+	if(quitting):
+		return
+	
 	var ret = thread.wait_to_finish()
 	obj_array = ret[0]
 	obj_tr_array = ret[1]
@@ -99,6 +106,15 @@ func generate(userdata):
 	if(o_arr.size() > 0):
 		var i = o_arr.size() - 1
 		while(i >= 0):
+			
+			# Not sure if I'm doing this right
+			if(mutex.try_lock() == OK):
+				if(quitting):
+					mutex.unlock()
+					return # Break this loop
+				else:
+					mutex.unlock()
+			
 			var p = o_arr[i].global_transform.origin
 			if(view_point.distance_to(p) > del_distance):
 				if(view_point.distance_to(t_arr[i]) > del_distance):
@@ -114,6 +130,14 @@ func generate(userdata):
 	while(x < w):
 		var z = -w
 		while(z < w):
+			
+			# Not sure if I'm doing this right
+			if(mutex.try_lock() == OK):
+				if(quitting):
+					mutex.unlock()
+					return # Break this loop
+				else:
+					mutex.unlock()
 			
 			var xx = x + pos.x
 			var zz = z + pos.z
@@ -160,3 +184,13 @@ func generate(userdata):
 	call_deferred("finish_generating")
 	return [o_arr, t_arr]
 
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+		
+		# Not sure if I'm doing this right
+		mutex.lock()
+		quitting = true # Break loop inside the thread
+		mutex.unlock()
+		
+		if(thread.is_active()):
+			thread.wait_to_finish()
