@@ -53,6 +53,9 @@ func _ready():
 	water = get_node(water)
 	env = get_environment()
 	
+	var vp = get_viewport()
+#	vp.size = vp.size / 2.0
+	
 #	print("\nexport var day_color_sun = Color(",day_color_sun,")")
 #	print("export var day_color_sky = Color(",day_color_sky,")")
 #	print("export var day_color_horizon = Color(",day_color_horizon,")")
@@ -81,9 +84,15 @@ func _ready():
 	
 
 func _process(delta):
+	# Update infolabel
 	var s = str("Fps: ", Performance.get_monitor(Performance.TIME_FPS), "\n")
-	s = str(s, "pos: ", get_viewport().get_camera().global_transform.origin, "\n")
+	var pos = get_viewport().get_camera().global_transform.origin
+	s = str(s, "X: %.1f" % pos.x, "\n")
+	s = str(s, "Y: %.1f" % pos.y, "\n")
+	s = str(s, "Z: %.1f" % pos.z, "\n")
 	dlabel.set_text(s)
+	
+#	"%10.3f" % 10000.5555
 	
 #	if(Input.is_action_just_pressed("shoot")):
 #		print_stray_nodes()

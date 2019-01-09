@@ -4,7 +4,6 @@ export (NodePath) var sun # Directional light for the sun
 var use_only_lod = false # Not used
 
 func _ready():
-	print("Printing variable just to get rid of warning in ", name, ": ", use_only_lod)
 	sun = get_node(sun)
 
 func _process(delta):

@@ -18,7 +18,6 @@ var last_gen_pos = Vector3(0,0,0)
 
 var allow_generating = true
 var quitting = false
-
 var mutex = Mutex.new()
 
 func _ready():
