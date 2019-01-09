@@ -1,21 +1,34 @@
 extends Node
 
-export var shortcut_action = "" setget set_shortcut_action
+export var shortcut_action = "screenshot"
 export var file_prefix = ""
 export(int, 'Datetime', 'Unix Timestamp') var file_tag
-export(String, DIR) var output_path = "res://" #setget set_output_path
+var output_path
 
 var _tag = ""
 var _index = 0
 
 func _ready():
-	_check_actions([shortcut_action])
-	_check_path(output_path)
 	
-	if not output_path[-1] == "/":
-		output_path += "/"
 	if not file_prefix.empty():
 		file_prefix += "_"
+	
+	if(OS.is_debug_build()):
+		# This works in editor
+		output_path = "res://Screenshots/"
+	else:
+		# This works in exported game
+		output_path = OS.get_executable_path().get_base_dir()
+		output_path = str(output_path, "/Screenshots/")
+	
+	var dir = Directory.new()
+	if not dir.dir_exists(output_path):
+		print("Create folder for screenshots")
+		print(output_path)
+		dir.make_dir(output_path)
+	
+	
+	
 	set_process_input(true)
 	
 func _input(event):
@@ -32,21 +45,6 @@ func make_screenshot():
 	_update_tags()
 	image.save_png("%s%s%s_%s.png" % [output_path, file_prefix, _tag, _index])
 
-func _check_actions(actions=[]):
-	if OS.is_debug_build():
-		var message = 'WARNING: No action "%s"'
-		for action in actions:
-			if not InputMap.has_action(action):
-				print(message % action)
-				#breakpoint
-				
-func _check_path(path):
-	var dir = Directory.new()
-#	dir.open(path)
-	if not dir.dir_exists(path):
-		print("Create folder for screenshots")
-		dir.make_dir(path)
-
 func _update_tags():
 	var time
 	if (file_tag == 1): time = str(OS.get_unix_time())
@@ -58,11 +56,3 @@ func _update_tags():
 	else:
 		_index = 0
 	_tag = time	
-	
-func set_shortcut_action(action):
-	_check_actions([action])
-	shortcut_action = action
-	
-func set_output_path(path):
-	_check_path(path)
-	output_path = path
